@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node.js
+node_modules/
+.next/
+dist/
+.env
+.env.local
+.env*.local
+
+# エディタ
+.vscode/
+.idea/
+
+# ビルド成果物
+*.log
