@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROOTS — ヒーロー v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #090909;
+      color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 40px 24px 60px;
+      overflow: hidden;
+    }
+
+    /* ===== 背景：複数グロウが動く ===== */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: orbFloat ease-in-out infinite;
+    }
+
+    .glow-orb.orb-1 {
+      width: 500px; height: 500px;
+      top: -10%; left: -5%;
+      background: rgba(80, 160, 240, 0.12);
+      animation-duration: 7s;
+    }
+
+    .glow-orb.orb-2 {
+      width: 400px; height: 400px;
+      bottom: -5%; right: -5%;
+      background: rgba(240, 160, 50, 0.12);
+      animation-duration: 9s;
+      animation-delay: -3s;
+    }
+
+    .glow-orb.orb-3 {
+      width: 300px; height: 300px;
+      top: 30%; right: 10%;
+      background: rgba(80, 200, 255, 0.06);
+      animation-duration: 11s;
+      animation-delay: -5s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    /* ===== パーティクル ===== */
+    .particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: rise linear infinite;
+    }
+
+    .particle.spark {
+      border-radius: 2px;
+      animation: spark linear infinite;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(110vh) scale(0); opacity: 0; }
+      5% { opacity: 1; transform: translateY(105vh) scale(1); }
+      85% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+    }
+
+    @keyframes spark {
+      0% { transform: translateY(110vh) rotate(0deg) scale(0); opacity: 0; }
+      5% { opacity: 1; transform: translateY(105vh) rotate(0deg) scale(1); }
+      100% { transform: translateY(-10vh) rotate(540deg) scale(0); opacity: 0; }
+    }
+
+    /* ===== 動くリング装飾 ===== */
+    .ring-deco {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      pointer-events: none;
+      opacity: 0.08;
+    }
+
+    .ring-deco.ring-1 {
+      width: 600px; height: 600px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-color: #50A0F0;
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+
+    .ring-deco.ring-2 {
+      width: 500px; height: 500px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-color: #F0A032;
+      animation: ringPulse 4s ease-in-out infinite 1s;
+    }
+
+    .ring-deco.ring-3 {
+      width: 400px; height: 400px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-color: #50A0F0;
+      animation: ringPulse 4s ease-in-out infinite 2s;
+    }
+
+    @keyframes ringPulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      50% { opacity: 0.12; }
+      100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    }
+
+    /* ===== トップラベル ===== */
+    .top-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: #50A0F0;
+      position: relative;
+      z-index: 2;
+      animation: labelIn 0.6s ease-out both;
+    }
+
+    .top-label::before,
+    .top-label::after {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: #50A0F0;
+      vertical-align: middle;
+      margin: 0 16px;
+      opacity: 0.5;
+    }
+
+    @keyframes labelIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ブランド名 ===== */
+    .brand-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(6rem, 18vw, 12rem);
+      letter-spacing: 0.25em;
+      line-height: 0.85;
+      position: relative;
+      z-index: 2;
+      margin-top: 16px;
+      background: linear-gradient(135deg, #60B0FF 0%, #FFC050 50%, #FF8030 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: brandIn 1s ease-out 0.2s both, gradientShift 5s ease-in-out infinite;
+    }
+
+    @keyframes brandIn {
+      0% { opacity: 0; letter-spacing: 1em; filter: blur(12px); transform: scale(1.1); }
+      60% { filter: blur(0); }
+      100% { opacity: 1; letter-spacing: 0.25em; transform: scale(1); }
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* ===== タグライン ===== */
+    .tagline {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.5em;
+      margin-top: 12px;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .tagline span {
+      display: inline-block;
+      animation: charPop 0.5s ease-out both;
+      background: linear-gradient(to right, #7CC4FF, #FFD080);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes charPop {
+      0% { opacity: 0; transform: translateY(30px) scale(0.5); }
+      60% { transform: translateY(-4px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== アクセントバー ===== */
+    .accent-bar {
+      width: 100px;
+      height: 3px;
+      margin: 32px auto;
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(90deg, #50A0F0, #F0A032, #FF7020);
+      background-size: 200% 100%;
+      animation: barIn 0.8s ease-out 1s both, shimmer 3s ease-in-out infinite;
+      border-radius: 2px;
+    }
+
+    @keyframes barIn {
+      0% { width: 0; opacity: 0; }
+      100% { width: 100px; opacity: 1; }
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 0; }
+      50% { background-position: 100% 0; }
+    }
+
+    /* ===== 説明文 ===== */
+    .description {
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      color: #bbb;
+      text-align: center;
+      max-width: 520px;
+      line-height: 2.4;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.8s ease-out 1.2s both;
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== CTAボタン ===== */
+    .cta-btn {
+      display: inline-block;
+      margin-top: 44px;
+      padding: 20px 60px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: #090909;
+      background: linear-gradient(135deg, #F0A032 0%, #FF8030 100%);
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+      animation: ctaIn 0.8s ease-out 1.4s both;
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, #F0A032, #FF8030, #50A0F0);
+      z-index: -1;
+      opacity: 0;
+      filter: blur(16px);
+      transition: opacity 0.4s;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .cta-btn:hover::after {
+      opacity: 0.6;
+    }
+
+    @keyframes ctaIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+      60% { transform: translateY(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== サブ情報 ===== */
+    .sub-info {
+      margin-top: 36px;
+      display: flex;
+      gap: 40px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.8s ease-out 1.6s both;
+    }
+
+    .sub-info .stat {
+      text-align: center;
+    }
+
+    .sub-info .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .sub-info .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #555;
+      letter-spacing: 0.12em;
+      margin-top: 4px;
+    }
+
+    /* ===== スクロール誘導 ===== */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      animation: fadeUp 0.8s ease-out 2s both;
+    }
+
+    .scroll-hint .arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid #50A0F0;
+      border-bottom: 2px solid #50A0F0;
+      transform: rotate(45deg);
+      margin: 0 auto;
+      opacity: 0.4;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.4; }
+      50% { transform: rotate(45deg) translateY(8px); opacity: 0.8; }
+    }
+
+    .scroll-hint .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      color: #444;
+      letter-spacing: 0.2em;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero" id="hero">
+    <!-- 背景グロウ -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- パーティクル -->
+    <div class="particles" id="particles"></div>
+
+    <!-- リング装飾 -->
+    <div class="ring-deco ring-1"></div>
+    <div class="ring-deco ring-2"></div>
+    <div class="ring-deco ring-3"></div>
+
+    <!-- コンテンツ -->
+    <div class="top-label">CRAFT BEER × YOUR HOMETOWN</div>
+    <div class="brand-name">ROOTS</div>
+    <div class="tagline" id="tagline"></div>
+    <div class="accent-bar"></div>
+    <div class="description">
+      あなたの故郷の味を、一杯のビールに。<br>
+      都道府県民の投票で選ばれた副原料で醸す、<br>
+      世界にひとつの参加型クラフトビール。
+    </div>
+    <a class="cta-btn" href="#">あなたの県に投票する</a>
+    <div class="sub-info">
+      <div class="stat">
+        <div class="stat-number">47</div>
+        <div class="stat-label">PREFECTURES</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">1,000+</div>
+        <div class="stat-label">VOTES</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">OEM</div>
+        <div class="stat-label">BREWING</div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="arrow"></div>
+      <div class="label">SCROLL</div>
+    </div>
+  </section>
+
+  <script>
+    // タグライン：一文字ずつポップイン
+    const tagText = '親愛なる故郷へ';
+    const tagEl = document.getElementById('tagline');
+    tagText.split('').forEach((char, i) => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.style.animationDelay = (0.5 + i * 0.08) + 's';
+      tagEl.appendChild(span);
+    });
+
+    // パーティクル生成（増量 + バリエーション）
+    const container = document.getElementById('particles');
+    const colors = ['#60B0FF', '#FFC050', '#FF8030', '#80D0FF', '#FFD880', '#50A0F0'];
+
+    for (let i = 0; i < 60; i++) {
+      const p = document.createElement('div');
+      const isSpark = Math.random() > 0.7;
+      p.className = 'particle' + (isSpark ? ' spark' : '');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+      const size = isSpark
+        ? (Math.random() * 4 + 2)
+        : (Math.random() * 5 + 1);
+      p.style.width = size + 'px';
+      p.style.height = isSpark ? size * 0.4 + 'px' : size + 'px';
+
+      p.style.opacity = (Math.random() * 0.5 + 0.2).toFixed(2);
+      p.style.animationDuration = (Math.random() * 8 + 5) + 's';
+      p.style.animationDelay = (Math.random() * 8) + 's';
+      container.appendChild(p);
+    }
+  </script>
+
+</body>
+</html>

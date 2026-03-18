@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROOTS — カラー方向性比較</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #090909;
+      color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid #222;
+    }
+
+    .page-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      color: #e0e0e0;
+      margin-bottom: 12px;
+    }
+
+    .page-header p {
+      color: #888;
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ===== 各方向性セクション ===== */
+    .direction {
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .direction-label {
+      text-align: center;
+      padding: 50px 20px 0;
+    }
+
+    .direction-label .number {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .direction-label h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .direction-label .subtitle {
+      font-size: 0.85rem;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    .direction-label .concept {
+      font-size: 0.8rem;
+      color: #666;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .color-swatches {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 24px 20px;
+    }
+
+    .swatch {
+      text-align: center;
+    }
+
+    .swatch-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      border: 1px solid #333;
+    }
+
+    .swatch-name {
+      font-size: 0.7rem;
+      color: #888;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .swatch-code {
+      font-size: 0.65rem;
+      color: #555;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ===== ヒーローモックアップ ===== */
+    .hero-mock {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 80px 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-mock .accent-line {
+      width: 60px;
+      height: 2px;
+      margin: 0 auto 30px;
+    }
+
+    .hero-mock .brand-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      letter-spacing: 0.2em;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .hero-mock .tagline {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      margin-bottom: 40px;
+    }
+
+    .hero-mock .description {
+      font-size: 0.9rem;
+      color: #999;
+      max-width: 480px;
+      margin: 0 auto 48px;
+      line-height: 2;
+    }
+
+    .hero-mock .cta-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .hero-mock .sub-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #555;
+      margin-top: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== Direction A: 藍 × 琥珀 ===== */
+    .dir-a .direction-label h2 { color: #4A7FB5; }
+    .dir-a .accent-line { background: #4A7FB5; }
+    .dir-a .brand-name { color: #4A7FB5; }
+    .dir-a .tagline { color: #8AB4D8; }
+    .dir-a .cta-btn {
+      background: #D4853A;
+      color: #090909;
+    }
+    .dir-a .cta-btn:hover { background: #E09550; }
+
+    /* ===== Direction B: 翠 × 朱 ===== */
+    .dir-b .direction-label h2 { color: #5A9E6F; }
+    .dir-b .accent-line { background: #5A9E6F; }
+    .dir-b .brand-name { color: #5A9E6F; }
+    .dir-b .tagline { color: #8CC4A0; }
+    .dir-b .cta-btn {
+      background: #C44D38;
+      color: #e0e0e0;
+    }
+    .dir-b .cta-btn:hover { background: #D45D48; }
+
+    /* ===== Direction C: 銅 × 墨藍 ===== */
+    .dir-c .direction-label h2 { color: #B8784E; }
+    .dir-c .accent-line { background: #B8784E; }
+    .dir-c .brand-name { color: #B8784E; }
+    .dir-c .tagline { color: #D4A87A; }
+    .dir-c .cta-btn {
+      background: #3A6B8A;
+      color: #e0e0e0;
+    }
+    .dir-c .cta-btn:hover { background: #4A7B9A; }
+
+    /* ===== Direction D: 白磁 × 深紅 ===== */
+    .dir-d .direction-label h2 { color: #C8BFA8; }
+    .dir-d .accent-line { background: #C8BFA8; }
+    .dir-d .brand-name { color: #C8BFA8; }
+    .dir-d .tagline { color: #A89E8A; }
+    .dir-d .cta-btn {
+      background: #A63D2F;
+      color: #e0e0e0;
+    }
+    .dir-d .cta-btn:hover { background: #B64D3F; }
+
+    /* ===== フッター ===== */
+    .page-footer {
+      text-align: center;
+      padding: 60px 20px;
+      color: #444;
+      font-size: 0.75rem;
+      font-family: 'Space Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>COLOR DIRECTION COMPARE</h1>
+    <p>
+      ROOTSの世界観を決めるカラー方向性の比較ページです。<br>
+      背景 #090909 は固定。アクセントカラーとCTAカラーの組み合わせを4案ご提案します。
+    </p>
+  </header>
+
+  <!-- ===== Direction A ===== -->
+  <section class="direction dir-a">
+    <div class="direction-label">
+      <div class="number">DIRECTION — A</div>
+      <h2>藍 × 琥珀</h2>
+      <div class="subtitle">INDIGO & AMBER</div>
+      <div class="concept">
+        日本の伝統的な藍染めの深みと、クラフトビールの琥珀色。<br>
+        知的で文化的な奥行きを感じさせる組み合わせ。
+      </div>
+    </div>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #090909;"></div>
+        <div class="swatch-name">背景</div>
+        <div class="swatch-code">#090909</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #4A7FB5;"></div>
+        <div class="swatch-name">藍</div>
+        <div class="swatch-code">#4A7FB5</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #D4853A;"></div>
+        <div class="swatch-name">琥珀</div>
+        <div class="swatch-code">#D4853A</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #e0e0e0;"></div>
+        <div class="swatch-name">テキスト</div>
+        <div class="swatch-code">#E0E0E0</div>
+      </div>
+    </div>
+    <div class="hero-mock">
+      <div class="accent-line"></div>
+      <div class="brand-name">ROOTS</div>
+      <div class="tagline">親 愛 な る 故 郷 へ</div>
+      <div class="description">
+        あなたの故郷の味を、一杯のビールに。<br>
+        都道府県民の投票で選ばれた副原料で醸す、<br>
+        世界にひとつの参加型クラフトビール。
+      </div>
+      <a class="cta-btn" href="#">あなたの県に投票する</a>
+      <div class="sub-text">47 PREFECTURES — 47 STORIES</div>
+    </div>
+  </section>
+
+  <!-- ===== Direction B ===== -->
+  <section class="direction dir-b">
+    <div class="direction-label">
+      <div class="number">DIRECTION — B</div>
+      <h2>翠 × 朱</h2>
+      <div class="subtitle">JADE & VERMILLION</div>
+      <div class="concept">
+        故郷の山々の緑と、神社の鳥居の朱色。<br>
+        日本の原風景を想起させる、土着的で力強い組み合わせ。
+      </div>
+    </div>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #090909;"></div>
+        <div class="swatch-name">背景</div>
+        <div class="swatch-code">#090909</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #5A9E6F;"></div>
+        <div class="swatch-name">翠</div>
+        <div class="swatch-code">#5A9E6F</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #C44D38;"></div>
+        <div class="swatch-name">朱</div>
+        <div class="swatch-code">#C44D38</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #e0e0e0;"></div>
+        <div class="swatch-name">テキスト</div>
+        <div class="swatch-code">#E0E0E0</div>
+      </div>
+    </div>
+    <div class="hero-mock">
+      <div class="accent-line"></div>
+      <div class="brand-name">ROOTS</div>
+      <div class="tagline">親 愛 な る 故 郷 へ</div>
+      <div class="description">
+        あなたの故郷の味を、一杯のビールに。<br>
+        都道府県民の投票で選ばれた副原料で醸す、<br>
+        世界にひとつの参加型クラフトビール。
+      </div>
+      <a class="cta-btn" href="#">あなたの県に投票する</a>
+      <div class="sub-text">47 PREFECTURES — 47 STORIES</div>
+    </div>
+  </section>
+
+  <!-- ===== Direction C ===== -->
+  <section class="direction dir-c">
+    <div class="direction-label">
+      <div class="number">DIRECTION — C</div>
+      <h2>銅 × 墨藍</h2>
+      <div class="subtitle">COPPER & DARK INDIGO</div>
+      <div class="concept">
+        銅器のような温かみのある光沢と、墨で染めたような深い藍。<br>
+        クラフトの手触りと日本の美意識が融合した組み合わせ。
+      </div>
+    </div>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #090909;"></div>
+        <div class="swatch-name">背景</div>
+        <div class="swatch-code">#090909</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #B8784E;"></div>
+        <div class="swatch-name">銅</div>
+        <div class="swatch-code">#B8784E</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #3A6B8A;"></div>
+        <div class="swatch-name">墨藍</div>
+        <div class="swatch-code">#3A6B8A</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #e0e0e0;"></div>
+        <div class="swatch-name">テキスト</div>
+        <div class="swatch-code">#E0E0E0</div>
+      </div>
+    </div>
+    <div class="hero-mock">
+      <div class="accent-line"></div>
+      <div class="brand-name">ROOTS</div>
+      <div class="tagline">親 愛 な る 故 郷 へ</div>
+      <div class="description">
+        あなたの故郷の味を、一杯のビールに。<br>
+        都道府県民の投票で選ばれた副原料で醸す、<br>
+        世界にひとつの参加型クラフトビール。
+      </div>
+      <a class="cta-btn" href="#">あなたの県に投票する</a>
+      <div class="sub-text">47 PREFECTURES — 47 STORIES</div>
+    </div>
+  </section>
+
+  <!-- ===== Direction D ===== -->
+  <section class="direction dir-d">
+    <div class="direction-label">
+      <div class="number">DIRECTION — D</div>
+      <h2>白磁 × 深紅</h2>
+      <div class="subtitle">PORCELAIN & CRIMSON</div>
+      <div class="concept">
+        日本の白磁のような静かな品格と、深い紅。<br>
+        ミニマルで現代的、余白を活かした洗練された組み合わせ。
+      </div>
+    </div>
+    <div class="color-swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #090909;"></div>
+        <div class="swatch-name">背景</div>
+        <div class="swatch-code">#090909</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #C8BFA8;"></div>
+        <div class="swatch-name">白磁</div>
+        <div class="swatch-code">#C8BFA8</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #A63D2F;"></div>
+        <div class="swatch-name">深紅</div>
+        <div class="swatch-code">#A63D2F</div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background: #e0e0e0;"></div>
+        <div class="swatch-name">テキスト</div>
+        <div class="swatch-code">#E0E0E0</div>
+      </div>
+    </div>
+    <div class="hero-mock">
+      <div class="accent-line"></div>
+      <div class="brand-name">ROOTS</div>
+      <div class="tagline">親 愛 な る 故 郷 へ</div>
+      <div class="description">
+        あなたの故郷の味を、一杯のビールに。<br>
+        都道府県民の投票で選ばれた副原料で醸す、<br>
+        世界にひとつの参加型クラフトビール。
+      </div>
+      <a class="cta-btn" href="#">あなたの県に投票する</a>
+      <div class="sub-text">47 PREFECTURES — 47 STORIES</div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    ROOTS — COLOR DIRECTION COMPARE v1.0
+  </footer>
+
+</body>
+</html>

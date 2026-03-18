@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROOTS — 親愛なる故郷へ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================================================
+       リセット・ベース
+    =================================================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #090909;
+      color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif;
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
+    body.ready { overflow-y: auto; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================================================
+       1. ロゴイントロ オーバーレイ
+    =================================================== */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #090909;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #intro-overlay.fade-out { opacity: 0; visibility: hidden; }
+    #intro-overlay canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .intro-content { position: relative; z-index: 2; text-align: center; }
+    .intro-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 16vw, 11rem);
+      letter-spacing: 0.3em;
+      line-height: 0.85;
+      opacity: 0;
+    }
+    .intro-brand span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px) scale(0.5);
+      background: linear-gradient(135deg, #60B0FF 0%, #FFC050 50%, #FF8030 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .intro-brand span.pop {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.4s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .intro-tagline {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(0.9rem, 2.2vw, 1.3rem);
+      letter-spacing: 0.5em;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+      background: linear-gradient(to right, #7CC4FF, #FFD080);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 16px;
+    }
+    .intro-tagline.show { opacity: 1; transform: translateY(0); }
+    .intro-flash {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle, rgba(96,176,255,0.15), transparent 70%);
+      opacity: 0; z-index: 1; pointer-events: none;
+    }
+    .intro-flash.fire { animation: flashBurst 0.8s ease-out forwards; }
+    @keyframes flashBurst {
+      0% { opacity: 0; transform: scale(0.5); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: scale(2.5); }
+    }
+
+    /* ===================================================
+       2. ヒーローセクション
+    =================================================== */
+    #hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 24px 24px 48px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    #hero.visible { opacity: 1; }
+
+    /* 背景グロウ */
+    .glow-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; animation: orbFloat ease-in-out infinite;
+    }
+    .glow-orb.o1 { width: 500px; height: 500px; top: -10%; left: -5%; background: rgba(80,160,240,0.1); animation-duration: 7s; }
+    .glow-orb.o2 { width: 400px; height: 400px; bottom: -5%; right: -5%; background: rgba(240,160,50,0.1); animation-duration: 9s; animation-delay: -3s; }
+    .glow-orb.o3 { width: 300px; height: 300px; top: 40%; right: 15%; background: rgba(80,200,255,0.05); animation-duration: 11s; animation-delay: -6s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-40px) scale(1.1); }
+      66% { transform: translate(-20px,20px) scale(0.95); }
+    }
+
+    /* パーティクル */
+    .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .particle { position: absolute; border-radius: 50%; animation: rise linear infinite; }
+    .particle.spark { border-radius: 2px; animation-name: sparkAnim; }
+    @keyframes rise {
+      0% { transform: translateY(110vh) scale(0); opacity: 0; }
+      5% { opacity: 1; transform: translateY(105vh) scale(1); }
+      85% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+    }
+    @keyframes sparkAnim {
+      0% { transform: translateY(110vh) rotate(0) scale(0); opacity: 0; }
+      5% { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(540deg) scale(0); opacity: 0; }
+    }
+
+    /* リング */
+    .ring-deco {
+      position: absolute; border-radius: 50%; border: 1px solid;
+      pointer-events: none; top: 50%; left: 50%;
+      animation: ringPulse 4s ease-in-out infinite;
+    }
+    .ring-deco.r1 { width: 600px; height: 600px; margin: -300px 0 0 -300px; border-color: #50A0F0; opacity: 0.06; }
+    .ring-deco.r2 { width: 500px; height: 500px; margin: -250px 0 0 -250px; border-color: #F0A032; opacity: 0.06; animation-delay: 1.3s; }
+    @keyframes ringPulse {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { opacity: 0.1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* トップラベル */
+    .hero-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: #50A0F0; z-index: 2;
+      opacity: 0; animation: fadeUp 0.6s ease-out 0.2s forwards;
+    }
+    .hero-label::before,
+    .hero-label::after {
+      content: ''; display: inline-block;
+      width: 24px; height: 1px;
+      background: #50A0F0; vertical-align: middle;
+      margin: 0 12px; opacity: 0.5;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ブランド名 */
+    .hero-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 10rem);
+      letter-spacing: 0.25em; line-height: 0.85;
+      z-index: 2; margin-top: 8px;
+      background: linear-gradient(135deg, #60B0FF 0%, #FFC050 50%, #FF8030 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: gradientShift 5s ease-in-out infinite, fadeUp 0.6s ease-out 0.3s both;
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.5em; z-index: 2; margin-top: 6px;
+      background: linear-gradient(to right, #7CC4FF, #FFD080);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: fadeUp 0.6s ease-out 0.4s both;
+    }
+
+    /* アクセントバー */
+    .accent-bar {
+      width: 100px; height: 3px; margin: 18px auto;
+      position: relative; z-index: 2; border-radius: 2px;
+      background: linear-gradient(90deg, #50A0F0, #F0A032, #FF7020);
+      background-size: 200% 100%;
+      animation: barIn 0.8s ease-out 0.5s both, shimmer 3s ease-in-out infinite;
+    }
+    @keyframes barIn { 0% { width: 0; opacity: 0; } 100% { width: 100px; opacity: 1; } }
+    @keyframes shimmer { 0%, 100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
+
+    /* 紹介文 */
+    .hero-description {
+      text-align: center;
+      max-width: 520px;
+      z-index: 2;
+      animation: fadeUp 0.8s ease-out 0.6s both;
+    }
+    .hero-description p {
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+      color: #bbb;
+      line-height: 2.2;
+    }
+    .hero-description p + p {
+      margin-top: 2px;
+    }
+
+    /* 日本地図セクション */
+    #map-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #090909;
+      position: relative;
+      padding: 40px 24px;
+    }
+    .map-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #japan-map {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    #japan-map path.pref {
+      transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+    .map-heading-en {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: #50A0F0; margin-bottom: 4px;
+    }
+    .map-heading-ja {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.85rem; color: #bbb;
+      letter-spacing: 0.1em; margin-bottom: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .map-container { max-width: 90vw; }
+    }
+
+    /* CTA */
+    .hero-cta {
+      display: inline-block; margin-top: 28px;
+      padding: 16px 52px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.05rem; font-weight: 700; letter-spacing: 0.15em;
+      color: #F0A032;
+      background: transparent;
+      border: 1.5px solid #F0A032; cursor: pointer; z-index: 2;
+      transition: all 0.3s ease; position: relative;
+      animation: fadeUp 0.8s ease-out 1s both;
+    }
+    .hero-cta::after {
+      content: ''; position: absolute; inset: -3px;
+      background: linear-gradient(135deg, #F0A032, #FF8030, #50A0F0);
+      z-index: -1; opacity: 0; filter: blur(16px);
+      transition: opacity 0.4s;
+    }
+    .hero-cta:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; transform: translateY(-3px) scale(1.02); }
+    .hero-cta:hover::after { opacity: 0.6; }
+
+    .hero-stats {
+      display: flex; gap: 36px; margin-top: 24px;
+      z-index: 2; animation: fadeUp 0.8s ease-out 1.2s both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .stat-lbl {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      color: #555; letter-spacing: 0.12em; margin-top: 4px;
+    }
+
+    /* スクロールヒント */
+    .scroll-hint {
+      position: absolute; bottom: 24px; left: 50%;
+      transform: translateX(-50%); z-index: 2; text-align: center;
+      animation: fadeUp 0.8s ease-out 1.4s both;
+    }
+    .scroll-hint .arr {
+      width: 16px; height: 16px;
+      border-right: 1.5px solid #50A0F0; border-bottom: 1.5px solid #50A0F0;
+      transform: rotate(45deg); margin: 0 auto; opacity: 0.4;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.4; }
+      50% { transform: rotate(45deg) translateY(6px); opacity: 0.8; }
+    }
+    .scroll-hint .sl {
+      font-family: 'Space Mono', monospace; font-size: 0.5rem;
+      color: #444; letter-spacing: 0.2em; margin-top: 6px;
+    }
+
+    /* モバイル向けヒーロー調整 */
+    @media (max-width: 768px) {
+      #hero { padding: 20px 20px 44px; }
+      .hero-label { font-size: 0.45rem; letter-spacing: 0.3em; }
+      .hero-label::before, .hero-label::after { width: 18px; margin: 0 8px; }
+      .hero-brand { font-size: clamp(3.5rem, 16vw, 6rem); margin-top: 6px; }
+      .hero-tagline { font-size: clamp(0.85rem, 2.5vw, 1.1rem); letter-spacing: 0.35em; margin-top: 4px; }
+      .accent-bar { margin: 12px auto; width: 70px; }
+      .hero-description p { font-size: 0.8rem; line-height: 2; }
+      .hero-cta {
+        margin-top: 20px; padding: 14px 0;
+        width: 80%; text-align: center;
+        font-size: 0.95rem;
+      }
+      .hero-stats { gap: 24px; margin-top: 16px; }
+      .stat-num { font-size: 1.4rem; }
+      .stat-lbl { font-size: 0.5rem; }
+      .scroll-hint { bottom: 16px; }
+    }
+
+    @media (max-width: 380px) {
+      .hero-brand { font-size: clamp(3rem, 18vw, 4.5rem); }
+      .hero-tagline { font-size: 0.8rem; letter-spacing: 0.25em; }
+      .hero-description p { font-size: 0.75rem; line-height: 1.9; }
+      .hero-cta { padding: 12px 0; font-size: 0.9rem; }
+      .hero-stats { gap: 18px; margin-top: 12px; }
+      .stat-num { font-size: 1.2rem; }
+    }
+
+    /* ===================================================
+       3. 都道府県マップ ポップアップ
+    =================================================== */
+    .map-popup {
+      position: absolute; z-index: 20;
+      background: rgba(17,17,17,0.95);
+      border: 1px solid #50A0F0;
+      border-radius: 6px; padding: 12px 16px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.2s ease;
+      font-family: 'Shippori Mincho', serif;
+      min-width: 160px;
+    }
+    .map-popup.active { opacity: 1; }
+    .map-popup-name {
+      font-size: 1rem; font-weight: 700; color: #e0e0e0;
+      margin-bottom: 6px; letter-spacing: 0.05em;
+    }
+    .map-popup-row {
+      display: flex; justify-content: space-between; gap: 12px;
+      font-size: 0.75rem; color: #bbb; margin-top: 3px;
+    }
+    .map-popup-val {
+      font-family: 'Space Mono', monospace; color: #60B0FF;
+    }
+
+    /* ===================================================
+       4. 投票モーダル
+    =================================================== */
+    .vote-modal {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(9,9,9,0.96);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .vote-modal.open { opacity: 1; visibility: visible; }
+    .modal-content {
+      position: relative;
+      width: 90%; max-width: 560px;
+      max-height: 80vh; overflow-y: auto;
+      padding: 48px 32px 36px;
+    }
+    .modal-close {
+      position: absolute; top: 12px; right: 12px;
+      background: none; border: 1px solid #555;
+      color: #bbb; font-size: 1.4rem; width: 36px; height: 36px;
+      cursor: pointer; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+      font-family: 'Space Mono', monospace;
+    }
+    .modal-close:hover { border-color: #50A0F0; color: #e0e0e0; }
+    .modal-step-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      color: #50A0F0; text-align: center;
+    }
+    .modal-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #e0e0e0; text-align: center;
+      margin: 8px 0 28px; letter-spacing: 0.08em;
+    }
+    .modal-back {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: none; border: none;
+      color: #50A0F0; font-size: 0.8rem;
+      font-family: 'Shippori Mincho', serif;
+      cursor: pointer; margin-bottom: 20px; padding: 4px 0;
+      transition: color 0.2s;
+    }
+    .modal-back:hover { color: #80C0FF; }
+    .region-grid, .pref-grid {
+      display: grid; gap: 12px;
+    }
+    .region-grid { grid-template-columns: repeat(2, 1fr); }
+    .pref-grid { grid-template-columns: repeat(3, 1fr); }
+    .region-btn, .pref-btn {
+      padding: 16px 8px;
+      background: transparent;
+      border: 1px solid rgba(80,160,240,0.3);
+      color: #e0e0e0; font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem; cursor: pointer;
+      border-radius: 4px; transition: all 0.2s ease;
+      letter-spacing: 0.05em;
+    }
+    .region-btn:hover, .pref-btn:hover {
+      border-color: #50A0F0;
+      background: rgba(80,160,240,0.1);
+      color: #fff;
+    }
+    .region-btn:active, .pref-btn:active {
+      background: rgba(80,160,240,0.2);
+    }
+    .modal-step { display: none; }
+    .modal-step.active { display: block; }
+
+    @media (max-width: 480px) {
+      .modal-content { padding: 40px 16px 24px; }
+      .region-grid { grid-template-columns: repeat(2, 1fr); }
+      .pref-grid { grid-template-columns: repeat(2, 1fr); }
+      .region-btn, .pref-btn { padding: 14px 6px; font-size: 0.85rem; }
+    }
+
+    /* ===================================================
+       5. 投票フォームセクション
+    =================================================== */
+    #vote-form-section {
+      min-height: 60vh; padding: 80px 24px;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; background: rgba(255,255,255,0.03);
+    }
+    .vote-form-line {
+      width: 60px; height: 1px;
+      background: #F0A032; margin-bottom: 8px;
+    }
+    .vote-form-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.4em;
+      color: #50A0F0; margin-bottom: 8px;
+    }
+    .vote-form-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700; color: #e0e0e0;
+      margin-bottom: 32px; letter-spacing: 0.08em;
+    }
+    .vote-form-card {
+      width: 100%; max-width: 480px;
+      border: 1px solid rgba(80,160,240,0.2);
+      border-radius: 8px; padding: 32px 28px;
+      background: rgba(255,255,255,0.02);
+    }
+    .form-selected-pref {
+      text-align: center; margin-bottom: 24px;
+      padding-bottom: 20px; border-bottom: 1px solid rgba(80,160,240,0.15);
+    }
+    .form-selected-pref .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem; letter-spacing: 0.2em; color: #555;
+      margin-bottom: 10px;
+    }
+    .pref-selector {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; height: 80px;
+      border: 1px solid rgba(80,160,240,0.2);
+      border-radius: 6px; padding: 0 24px;
+      background: transparent; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .pref-selector:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(80,160,240,0.4);
+    }
+    .pref-selector .selector-text {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem; color: #666;
+      letter-spacing: 0.08em;
+    }
+    .pref-selector .selector-arrow {
+      font-size: 1.4rem; color: #555;
+      transition: color 0.2s;
+    }
+    .pref-selector:hover .selector-arrow { color: #50A0F0; }
+    .pref-selector.selected .selector-text {
+      font-size: 1.3rem; font-weight: 700; color: #e0e0e0;
+      letter-spacing: 0.1em;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 0.8rem; color: #bbb;
+      margin-bottom: 6px; letter-spacing: 0.05em;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(80,160,240,0.2);
+      border-radius: 4px; color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif; font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: #50A0F0;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-submit {
+      display: block; width: 100%; margin-top: 24px;
+      padding: 16px; border: none; cursor: pointer;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.15em; color: #F0A032;
+      background: transparent;
+      border: 1.5px solid #F0A032;
+      border-radius: 4px; transition: all 0.3s ease;
+    }
+    .form-submit:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; transform: translateY(-2px); }
+    .form-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 1. ロゴイントロ ===== -->
+  <div id="intro-overlay">
+    <canvas id="intro-canvas"></canvas>
+    <div class="intro-flash" id="intro-flash"></div>
+    <div class="intro-content">
+      <div class="intro-brand" id="intro-brand"></div>
+      <div class="intro-tagline" id="intro-tagline">親 愛 な る 故 郷 へ</div>
+    </div>
+  </div>
+
+  <!-- ===== 2. ヒーローセクション ===== -->
+  <section id="hero">
+    <div class="glow-orb o1"></div>
+    <div class="glow-orb o2"></div>
+    <div class="glow-orb o3"></div>
+    <div class="particles" id="hero-particles"></div>
+    <div class="ring-deco r1"></div>
+    <div class="ring-deco r2"></div>
+
+    <div class="hero-label">CRAFT BEER × YOUR HOMETOWN</div>
+    <div class="hero-brand">ROOTS</div>
+    <div class="hero-tagline">親 愛 な る 故 郷 へ</div>
+    <div class="accent-bar"></div>
+
+    <div class="hero-description">
+      <p>あなたの故郷の味を、一杯のビールに。</p>
+      <p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>
+    </div>
+
+    <button class="hero-cta" id="vote-cta">あなたの県に投票する</button>
+
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">47</div><div class="stat-lbl">PREFECTURES</div></div>
+      <div class="stat"><div class="stat-num">1,000+</div><div class="stat-lbl">VOTES</div></div>
+      <div class="stat"><div class="stat-num">OEM</div><div class="stat-lbl">BREWING</div></div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="arr"></div>
+      <div class="sl">SCROLL</div>
+    </div>
+  </section>
+
+  <!-- ===== 2.5 日本地図セクション ===== -->
+  <section id="map-section">
+    <div class="map-container">
+      <div class="map-heading-en">PARTICIPATION MAP</div>
+      <div class="map-heading-ja">参加率マップ</div>
+      <svg id="japan-map"></svg>
+    </div>
+  </section>
+
+  <!-- ===== 3. 投票モーダル ===== -->
+  <div class="vote-modal" id="vote-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close">&times;</button>
+
+      <!-- STEP1: 地方選択 -->
+      <div class="modal-step active" id="modal-step1">
+        <div class="modal-step-label">STEP 1</div>
+        <div class="modal-title">地方を選んでください</div>
+        <div class="region-grid" id="region-grid"></div>
+      </div>
+
+      <!-- STEP2: 都道府県選択 -->
+      <div class="modal-step" id="modal-step2">
+        <button class="modal-back" id="modal-back">← 地方に戻る</button>
+        <div class="modal-step-label">STEP 2</div>
+        <div class="modal-title" id="step2-title">都道府県を選んでください</div>
+        <div class="pref-grid" id="pref-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4. 投票フォームセクション ===== -->
+  <section id="vote-form-section">
+    <div class="vote-form-line"></div>
+    <div class="vote-form-label">VOTE FOR YOUR HOMETOWN</div>
+    <div class="vote-form-title">投票フォーム</div>
+    <div class="vote-form-card">
+      <div class="form-selected-pref">
+        <div class="label">SELECTED PREFECTURE</div>
+        <div class="pref-selector" id="pref-selector">
+          <span class="selector-text" id="selector-text">タップして都道府県を選ぶ</span>
+          <span class="selector-arrow">›</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>おすすめの副原料</label>
+        <input type="text" id="form-ingredient" placeholder="例：ゆず、抹茶、みかん...">
+      </div>
+      <div class="form-group">
+        <label>メッセージ（任意）</label>
+        <textarea id="form-message" placeholder="故郷への想いを一言..."></textarea>
+      </div>
+      <button class="form-submit" id="form-submit" disabled>投票する</button>
+    </div>
+  </section>
+
+  <!-- D3.js & TopoJSON -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+  <script>
+// ========================================================
+// 1. ロゴイントロアニメーション
+// ========================================================
+const introOverlay = document.getElementById('intro-overlay');
+const introCanvas = document.getElementById('intro-canvas');
+const ctx = introCanvas.getContext('2d');
+const introBrand = document.getElementById('intro-brand');
+const introTagline = document.getElementById('intro-tagline');
+const introFlash = document.getElementById('intro-flash');
+
+function resizeCanvas() {
+  introCanvas.width = window.innerWidth;
+  introCanvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class IntroParticle {
+  constructor(cx, cy) {
+    this.cx = cx; this.cy = cy;
+    const angle = Math.random() * Math.PI * 2;
+    const dist = Math.max(cx, cy) * 1.2;
+    this.x = cx + Math.cos(angle) * dist;
+    this.y = cy + Math.sin(angle) * dist;
+    this.targetX = cx + (Math.random() - 0.5) * 200;
+    this.targetY = cy + (Math.random() - 0.5) * 80;
+    this.size = Math.random() * 3 + 1;
+    this.color = ['#60B0FF','#FFC050','#FF8030','#80D0FF'][Math.floor(Math.random()*4)];
+    this.speed = Math.random() * 0.02 + 0.01;
+    this.progress = 0;
+    this.phase = 'converge';
+    this.vx = 0; this.vy = 0; this.alpha = 0;
+  }
+  update() {
+    if (this.phase === 'converge') {
+      this.progress += this.speed;
+      if (this.progress > 1) this.progress = 1;
+      const ease = 1 - Math.pow(1 - this.progress, 3);
+      this.x += (this.targetX - this.x) * ease * 0.05;
+      this.y += (this.targetY - this.y) * ease * 0.05;
+      this.alpha = Math.min(this.progress * 2, 1);
+    } else if (this.phase === 'explode') {
+      this.x += this.vx; this.y += this.vy;
+      this.vx *= 0.98; this.vy *= 0.98;
+      this.alpha *= 0.96;
+    }
+  }
+  explode() {
+    this.phase = 'explode';
+    const angle = Math.random() * Math.PI * 2;
+    const force = Math.random() * 8 + 3;
+    this.vx = Math.cos(angle) * force;
+    this.vy = Math.sin(angle) * force;
+  }
+  draw(c) {
+    if (this.alpha < 0.01) return;
+    c.globalAlpha = this.alpha;
+    c.fillStyle = this.color;
+    c.beginPath();
+    c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    c.fill();
+  }
+}
+
+const introParticles = [];
+const cx = window.innerWidth / 2;
+const cy = window.innerHeight / 2;
+for (let i = 0; i < 120; i++) introParticles.push(new IntroParticle(cx, cy));
+
+let introAnimFrame;
+function animateIntro() {
+  ctx.clearRect(0, 0, introCanvas.width, introCanvas.height);
+  introParticles.forEach(p => { p.update(); p.draw(ctx); });
+  ctx.globalAlpha = 1;
+  introAnimFrame = requestAnimationFrame(animateIntro);
+}
+animateIntro();
+
+introBrand.style.opacity = '1';
+'ROOTS'.split('').forEach((l, i) => {
+  const span = document.createElement('span');
+  span.textContent = l;
+  introBrand.appendChild(span);
+  setTimeout(() => span.classList.add('pop'), 600 + i * 150);
+});
+
+setTimeout(() => introTagline.classList.add('show'), 1500);
+
+setTimeout(() => {
+  introFlash.classList.add('fire');
+  introParticles.forEach(p => p.explode());
+}, 2200);
+
+setTimeout(() => {
+  cancelAnimationFrame(introAnimFrame);
+  introOverlay.classList.add('fade-out');
+  showHero();
+}, 3200);
+
+// ========================================================
+// 2. データ定義（都道府県・人口・地方・ダミー投票）
+// ========================================================
+
+// 都道府県名マッピング（JIS X 0401 コード → 名前）
+const PREF_NAMES = {
+  1:'北海道',2:'青森県',3:'岩手県',4:'宮城県',5:'秋田県',6:'山形県',7:'福島県',
+  8:'茨城県',9:'栃木県',10:'群馬県',11:'埼玉県',12:'千葉県',13:'東京都',14:'神奈川県',
+  15:'新潟県',16:'富山県',17:'石川県',18:'福井県',19:'山梨県',20:'長野県',
+  21:'岐阜県',22:'静岡県',23:'愛知県',24:'三重県',25:'滋賀県',26:'京都府',
+  27:'大阪府',28:'兵庫県',29:'奈良県',30:'和歌山県',31:'鳥取県',32:'島根県',
+  33:'岡山県',34:'広島県',35:'山口県',36:'徳島県',37:'香川県',38:'愛媛県',
+  39:'高知県',40:'福岡県',41:'佐賀県',42:'長崎県',43:'熊本県',44:'大分県',
+  45:'宮崎県',46:'鹿児島県',47:'沖縄県'
+};
+
+// 2020年国勢調査 人口データ
+const POPULATION = {
+  1:5224614,2:1237984,3:1210534,4:2301996,5:959502,6:1068027,7:1833152,
+  8:2867009,9:1933146,10:1939110,11:7344765,12:6284480,13:14047594,14:9237337,
+  15:2201272,16:1034814,17:1132526,18:766863,19:809974,20:2048011,
+  21:1978742,22:3633202,23:7542415,24:1770254,25:1413610,26:2578087,
+  27:8837685,28:5465002,29:1324473,30:922584,31:553407,32:671126,
+  33:1888432,34:2799702,35:1342059,36:719559,37:950244,38:1334841,
+  39:691527,40:5135214,41:811442,42:1312317,43:1738301,44:1123852,
+  45:1069576,46:1588256,47:1467480
+};
+
+// 地方→都道府県コード マッピング
+const REGIONS = {
+  '北海道':[1],
+  '東北':[2,3,4,5,6,7],
+  '関東':[8,9,10,11,12,13,14],
+  '中部':[15,16,17,18,19,20,21,22,23],
+  '近畿':[24,25,26,27,28,29,30],
+  '中国':[31,32,33,34,35],
+  '四国':[36,37,38,39],
+  '九州沖縄':[40,41,42,43,44,45,46,47]
+};
+
+// ダミー投票データ（後でSupabase接続に差し替え）
+const DUMMY_VOTES = {
+  1:312,2:45,3:38,4:128,5:22,6:31,7:67,
+  8:89,9:54,10:61,11:245,12:198,13:520,14:310,
+  15:72,16:33,17:41,18:28,19:35,20:68,
+  21:55,22:142,23:289,24:63,25:48,26:156,
+  27:380,28:195,29:42,30:25,31:15,32:18,
+  33:78,34:135,35:39,36:21,37:29,38:43,
+  39:17,40:245,41:27,42:52,43:71,44:34,
+  45:28,46:55,47:89
+};
+
+// Supabase接続準備：この関数を差し替えるだけでOK
+async function getVoteData() {
+  // TODO: Supabase接続時はここを書き換える
+  // const { data } = await supabase.from('votes').select('pref_id, count');
+  // return data.reduce((acc, r) => { acc[r.pref_id] = r.count; return acc; }, {});
+  return { ...DUMMY_VOTES };
+}
+
+// 参加率に応じた6段階カラー（既存アクセント #50A0F0 = rgb(80,160,240) ベース）
+function getTierColor(votes, population) {
+  if (!votes || votes === 0) return 'rgba(80,160,240,0.02)';
+  const rate = votes / population;
+  if (rate < 0.00003) return 'rgba(80,160,240,0.08)';
+  if (rate < 0.00006) return 'rgba(80,160,240,0.15)';
+  if (rate < 0.00012) return 'rgba(80,160,240,0.25)';
+  if (rate < 0.00025) return 'rgba(80,160,240,0.40)';
+  return 'rgba(80,160,240,0.60)';
+}
+
+// ========================================================
+// 3. ヒーローセクション & D3.js 都道府県マップ
+// ========================================================
+const hero = document.getElementById('hero');
+let currentVoteData = {};
+
+function showHero() {
+  document.body.classList.add('ready');
+  hero.classList.add('visible');
+  loadJapanMap();
+  createHeroParticles();
+}
+
+async function loadJapanMap() {
+  try {
+    currentVoteData = await getVoteData();
+
+    const topoData = await d3.json(
+      'https://raw.githubusercontent.com/dataofjapan/land/master/japan.topojson'
+    );
+
+    const prefFeatures = topojson.feature(topoData, topoData.objects.japan).features;
+    if (!prefFeatures.length) return;
+
+    const width = 700, height = 750, padding = 40;
+    const projection = d3.geoMercator();
+    projection.fitSize(
+      [width - padding * 2, height - padding * 2],
+      { type: 'FeatureCollection', features: prefFeatures }
+    );
+    const [tx, ty] = projection.translate();
+    projection.translate([tx + padding, ty + padding]);
+
+    const pathGen = d3.geoPath().projection(projection);
+
+    const svg = d3.select('#japan-map')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // グロウフィルター
+    const defs = svg.append('defs');
+    const filter = defs.append('filter')
+      .attr('id', 'map-glow')
+      .attr('x', '-50%').attr('y', '-50%')
+      .attr('width', '200%').attr('height', '200%');
+    filter.append('feGaussianBlur').attr('stdDeviation', '2').attr('result', 'blur');
+    const merge = filter.append('feMerge');
+    merge.append('feMergeNode').attr('in', 'blur');
+    merge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    // ポップアップ用コンテナ
+    const mapContainer = document.querySelector('.map-container');
+    let popup = mapContainer.querySelector('.map-popup');
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.className = 'map-popup';
+      popup.innerHTML = '<div class="map-popup-name"></div>'
+        + '<div class="map-popup-row"><span>投票数</span><span class="map-popup-val" id="popup-votes"></span></div>'
+        + '<div class="map-popup-row"><span>参加率</span><span class="map-popup-val" id="popup-rate"></span></div>';
+      mapContainer.appendChild(popup);
+    }
+
+    // 都道府県パスを描画
+    svg.selectAll('path.pref')
+      .data(prefFeatures)
+      .join('path')
+      .attr('class', 'pref')
+      .attr('d', pathGen)
+      .attr('filter', 'url(#map-glow)')
+      .attr('fill', d => {
+        const pid = d.id || d.properties.id;
+        return getTierColor(currentVoteData[pid] || 0, POPULATION[pid] || 1);
+      })
+      .attr('stroke', '#50A0F0')
+      .attr('stroke-width', 0.5)
+      .style('cursor', 'pointer')
+      .style('transition', 'fill 0.3s ease, stroke 0.3s ease')
+      .on('mouseenter', function(event, d) {
+        d3.select(this).attr('stroke', '#80C0FF').attr('stroke-width', 1.2);
+      })
+      .on('mouseleave', function(event, d) {
+        d3.select(this).attr('stroke', '#50A0F0').attr('stroke-width', 0.5);
+        popup.classList.remove('active');
+      })
+      .on('click', function(event, d) {
+        event.stopPropagation();
+        const pid = d.id || d.properties.id;
+        const name = PREF_NAMES[pid] || d.properties.nam_ja || '不明';
+        const votes = currentVoteData[pid] || 0;
+        const pop = POPULATION[pid] || 1;
+        const rate = ((votes / pop) * 100).toFixed(4);
+
+        popup.querySelector('.map-popup-name').textContent = name;
+        popup.querySelector('#popup-votes').textContent = votes.toLocaleString() + ' 票';
+        popup.querySelector('#popup-rate').textContent = rate + '%';
+
+        // ポップアップ位置
+        const rect = mapContainer.getBoundingClientRect();
+        const px = event.clientX - rect.left;
+        const py = event.clientY - rect.top;
+        popup.style.left = Math.min(px + 10, rect.width - 180) + 'px';
+        popup.style.top = (py - 80) + 'px';
+        popup.classList.add('active');
+      });
+
+    // 地図外クリックでポップアップ閉じる
+    document.addEventListener('click', () => popup.classList.remove('active'));
+
+  } catch (err) {
+    console.warn('地図データの読み込みに失敗:', err);
+  }
+}
+
+// ========================================================
+// 4. 投票モーダル
+// ========================================================
+const voteModal = document.getElementById('vote-modal');
+const modalStep1 = document.getElementById('modal-step1');
+const modalStep2 = document.getElementById('modal-step2');
+const regionGrid = document.getElementById('region-grid');
+const prefGrid = document.getElementById('pref-grid');
+const step2Title = document.getElementById('step2-title');
+let selectedPrefCode = null;
+
+// 地方ボタン生成
+Object.keys(REGIONS).forEach(region => {
+  const btn = document.createElement('button');
+  btn.className = 'region-btn';
+  btn.textContent = region;
+  btn.addEventListener('click', () => showPrefStep(region));
+  regionGrid.appendChild(btn);
+});
+
+function showPrefStep(region) {
+  modalStep1.classList.remove('active');
+  modalStep2.classList.add('active');
+  step2Title.textContent = region + ' の都道府県を選んでください';
+  prefGrid.innerHTML = '';
+  REGIONS[region].forEach(code => {
+    const btn = document.createElement('button');
+    btn.className = 'pref-btn';
+    btn.textContent = PREF_NAMES[code];
+    btn.addEventListener('click', () => selectPref(code));
+    prefGrid.appendChild(btn);
+  });
+}
+
+function selectPref(code) {
+  selectedPrefCode = code;
+  closeModal();
+  // フォームに反映
+  const selectorEl = document.getElementById('pref-selector');
+  const textEl = document.getElementById('selector-text');
+  textEl.textContent = PREF_NAMES[code];
+  selectorEl.classList.add('selected');
+  document.getElementById('form-submit').disabled = false;
+  // 投票フォームへスクロール
+  document.getElementById('vote-form-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function openModal() {
+  // STEP1にリセット
+  modalStep1.classList.add('active');
+  modalStep2.classList.remove('active');
+  voteModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  voteModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// モーダルのイベント
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-back').addEventListener('click', () => {
+  modalStep2.classList.remove('active');
+  modalStep1.classList.add('active');
+});
+voteModal.addEventListener('click', (e) => {
+  if (e.target === voteModal) closeModal();
+});
+
+// CTAボタンからモーダルを開く
+document.getElementById('vote-cta').addEventListener('click', openModal);
+
+// フォームの都道府県セレクター
+document.getElementById('pref-selector').addEventListener('click', openModal);
+
+// ========================================================
+// 5. パーティクル（既存維持）
+// ========================================================
+function createHeroParticles() {
+  const container = document.getElementById('hero-particles');
+  if (container.children.length > 0) return;
+  const colors = ['#60B0FF','#FFC050','#FF8030','#80D0FF','#FFD880','#50A0F0'];
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    const isSpark = Math.random() > 0.7;
+    p.className = 'particle' + (isSpark ? ' spark' : '');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const size = isSpark ? Math.random()*4+2 : Math.random()*4+1;
+    p.style.width = size + 'px';
+    p.style.height = (isSpark ? size*0.4 : size) + 'px';
+    p.style.opacity = (Math.random()*0.4+0.15).toFixed(2);
+    p.style.animationDuration = (Math.random()*8+5) + 's';
+    p.style.animationDelay = (Math.random()*8) + 's';
+    container.appendChild(p);
+  }
+}
+  </script>
+</body>
+</html>
