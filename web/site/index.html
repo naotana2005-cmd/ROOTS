@@ -219,6 +219,27 @@
       margin-top: 2px;
     }
 
+    /* 3ステップ表示 */
+    .hero-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      margin-top: 16px;
+      animation: fadeUp 0.8s ease-out 0.7s both;
+    }
+    .hero-steps span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: #666;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .hero-steps .step-arrow {
+      color: #555;
+      font-size: 0.6rem;
+    }
+
     /* 日本地図セクション */
     #map-section {
       min-height: 100vh;
@@ -253,7 +274,14 @@
     .map-heading-ja {
       font-family: 'Shippori Mincho', serif;
       font-size: 0.85rem; color: #bbb;
-      letter-spacing: 0.1em; margin-bottom: 16px;
+      letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .map-description {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.75rem;
+      color: #666;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
     }
 
     @media (max-width: 480px) {
@@ -327,8 +355,11 @@
       .hero-tagline { font-size: clamp(0.85rem, 2.5vw, 1.1rem); letter-spacing: 0.35em; margin-top: 4px; }
       .accent-bar { margin: 12px auto; width: 70px; }
       .hero-description p { font-size: 0.8rem; line-height: 2; }
+      .hero-steps span { font-size: 0.5rem; }
+      .hero-steps .step-arrow { font-size: 0.45rem; }
+      .hero-steps { gap: 4px; margin-top: 10px; }
       .hero-cta {
-        margin-top: 20px; padding: 14px 0;
+        margin-top: 14px; padding: 14px 0;
         width: 80%; text-align: center;
         font-size: 0.95rem;
       }
@@ -545,6 +576,223 @@
     }
     .form-submit:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; transform: translateY(-2px); }
     .form-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* ？ボタン & ヘルプ展開 */
+    .label-with-help {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .help-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: transparent; border: 1px solid #F0A032;
+      color: #F0A032; font-size: 0.65rem; font-weight: 700;
+      cursor: pointer; flex-shrink: 0;
+      font-family: 'Shippori Mincho', serif;
+      transition: background 0.2s, color 0.2s;
+    }
+    .help-btn:hover { background: rgba(240,160,50,0.15); }
+    .help-btn.active { background: #F0A032; color: #090909; }
+    .help-content {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease, margin 0.35s ease;
+      background: rgba(240,160,50,0.06);
+      border-radius: 4px; padding: 0 12px; margin: 0 0;
+    }
+    .help-content.open {
+      max-height: 200px; padding: 12px; margin: 8px 0;
+    }
+    .help-content p {
+      font-size: 0.75rem; color: #999; line-height: 1.8;
+      margin: 0;
+    }
+    .help-content p + p { margin-top: 6px; }
+
+    /* サジェストカード */
+    .suggest-cards {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 10px 0;
+    }
+    .suggest-cards:empty { display: none; }
+    .suggest-card {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #F0A032;
+      border-radius: 20px;
+      color: #F0A032;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .suggest-card:hover { background: rgba(240,160,50,0.15); }
+    .suggest-card.selected { background: #F0A032; color: #090909; }
+    .suggest-card.write-own {
+      border-style: dashed;
+    }
+
+    /* ステータス別表示 */
+    .status-message {
+      text-align: center;
+      width: 100%;
+      max-width: 480px;
+    }
+    .status-message h3 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e0e0e0;
+      margin-bottom: 20px;
+      line-height: 2;
+    }
+    .status-message p {
+      font-size: 0.95rem;
+      color: #bbb;
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+    .status-message .result-list {
+      margin: 20px 0;
+      text-align: left;
+      display: inline-block;
+    }
+    .status-message .result-item {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(80,160,240,0.1);
+      font-size: 0.95rem;
+    }
+    .result-item .rank {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: #50A0F0;
+      letter-spacing: 0.1em;
+      min-width: 24px;
+    }
+    .result-item .name {
+      color: #e0e0e0;
+      font-weight: 700;
+      flex: 1;
+    }
+    .result-item .votes {
+      font-family: 'Space Mono', monospace;
+      color: #F0A032;
+      font-size: 0.85rem;
+    }
+    .status-message .adopted {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid rgba(240,160,50,0.3);
+      border-radius: 6px;
+      background: rgba(240,160,50,0.05);
+      text-align: center;
+    }
+    .adopted .adopted-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #F0A032;
+      letter-spacing: 0.3em;
+      margin-bottom: 6px;
+    }
+    .adopted .adopted-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #F0A032;
+    }
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 24px 0;
+    }
+    .countdown-unit {
+      text-align: center;
+    }
+    .countdown-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .countdown-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.5rem;
+      color: #555;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+    .status-message .email-form {
+      margin-top: 24px;
+      display: flex;
+      gap: 8px;
+    }
+    .status-message .email-form input {
+      flex: 1;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(80,160,240,0.2);
+      border-radius: 4px;
+      color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.9rem;
+    }
+    .status-message .email-form input:focus {
+      outline: none;
+      border-color: #50A0F0;
+    }
+    .status-message .email-form button,
+    .status-message .purchase-btn {
+      padding: 12px 20px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #F0A032;
+      background: transparent;
+      border: 1.5px solid #F0A032;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .status-message .email-form button:hover,
+    .status-message .purchase-btn:hover {
+      background: linear-gradient(135deg, #F0A032, #FF8030);
+      color: #090909;
+      transform: translateY(-2px);
+    }
+    .status-message .purchase-btn {
+      display: block;
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .status-message .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(80,160,240,0.1);
+      font-size: 0.9rem;
+    }
+    .info-row .info-label {
+      color: #888;
+    }
+    .info-row .info-value {
+      font-family: 'Space Mono', monospace;
+      color: #60B0FF;
+    }
+    @media (max-width: 480px) {
+      .status-message .email-form {
+        flex-direction: column;
+      }
+      .countdown-num { font-size: 1.8rem; }
+    }
   </style>
 </head>
 <body>
@@ -573,9 +821,17 @@
     <div class="hero-tagline">親 愛 な る 故 郷 へ</div>
     <div class="accent-bar"></div>
 
-    <div class="hero-description">
+    <div class="hero-description" id="hero-description">
       <p>あなたの故郷の味を、一杯のビールに。</p>
       <p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>
+    </div>
+
+    <div class="hero-steps">
+      <span>① 県を選ぶ</span>
+      <span class="step-arrow">→</span>
+      <span>② 味を提案する</span>
+      <span class="step-arrow">→</span>
+      <span>③ ビールになる</span>
     </div>
 
     <button class="hero-cta" id="vote-cta">あなたの県に投票する</button>
@@ -597,6 +853,7 @@
     <div class="map-container">
       <div class="map-heading-en">PARTICIPATION MAP</div>
       <div class="map-heading-ja">参加率マップ</div>
+      <div class="map-description" id="map-description">投票が集まると、その県が光り始めます。</div>
       <svg id="japan-map"></svg>
     </div>
   </section>
@@ -628,23 +885,31 @@
     <div class="vote-form-line"></div>
     <div class="vote-form-label">VOTE FOR YOUR HOMETOWN</div>
     <div class="vote-form-title">投票フォーム</div>
-    <div class="vote-form-card">
+    <div class="vote-form-card" id="vote-form-card">
       <div class="form-selected-pref">
         <div class="label">SELECTED PREFECTURE</div>
         <div class="pref-selector" id="pref-selector">
-          <span class="selector-text" id="selector-text">タップして都道府県を選ぶ</span>
+          <span class="selector-text" id="selector-text">出身地・縁のある県を選ぶ</span>
           <span class="selector-arrow">›</span>
         </div>
       </div>
       <div class="form-group">
-        <label>おすすめの副原料</label>
-        <input type="text" id="form-ingredient" placeholder="例：ゆず、抹茶、みかん...">
+        <label class="label-with-help">
+          あなたの県の「味」を教えてください
+          <button type="button" class="help-btn" id="help-btn">？</button>
+        </label>
+        <div class="help-content" id="help-content">
+          <p>野菜・果物・海産物・茶葉など、<br>その土地で育った素材を教えてください。<br>鰹節や昆布などの乾燥素材もOKです。</p>
+          <p>たこ焼きなどの調理済み料理は<br>醸造の素材として使いにくいため、<br>素材そのものを教えてもらえると助かります。</p>
+        </div>
+        <div class="suggest-cards" id="suggest-cards"></div>
+        <input type="text" id="form-ingredient" placeholder="例：泉州玉ねぎ、山椒、みかん...">
       </div>
       <div class="form-group">
-        <label>メッセージ（任意）</label>
+        <label>故郷への想いがあれば（任意）</label>
         <textarea id="form-message" placeholder="故郷への想いを一言..."></textarea>
       </div>
-      <button class="form-submit" id="form-submit" disabled>投票する</button>
+      <button class="form-submit" id="form-submit" disabled>この味をビールにする</button>
     </div>
   </section>
 
@@ -952,7 +1217,13 @@ Object.keys(REGIONS).forEach(region => {
   const btn = document.createElement('button');
   btn.className = 'region-btn';
   btn.textContent = region;
-  btn.addEventListener('click', () => showPrefStep(region));
+  btn.addEventListener('click', () => {
+    if (region === '北海道') {
+      selectPref(1);
+    } else {
+      showPrefStep(region);
+    }
+  });
   regionGrid.appendChild(btn);
 });
 
@@ -1034,6 +1305,307 @@ function createHeroParticles() {
     container.appendChild(p);
   }
 }
+// ========================================================
+// 6. ？ボタンのトグル
+// ========================================================
+const helpBtn = document.getElementById('help-btn');
+const helpContent = document.getElementById('help-content');
+helpBtn.addEventListener('click', () => {
+  helpBtn.classList.toggle('active');
+  helpContent.classList.toggle('open');
+});
+
+// ========================================================
+// 7. サジェストカード — 47都道府県の特産品データ
+// ========================================================
+const PREF_SUGGESTS = {
+  1: ['ジャガイモ','メロン','昆布','ラベンダー','とうもろこし'],
+  2: ['りんご','にんにく','ごぼう','長芋'],
+  3: ['わかめ','山ぶどう','ホップ','雑穀'],
+  4: ['ずんだ(枝豆)','牡蠣','セリ','ササニシキ'],
+  5: ['じゅんさい','とんぶり','ハタハタ','あきたこまち'],
+  6: ['さくらんぼ','だだちゃ豆','ラ・フランス','そば'],
+  7: ['桃','あんぽ柿','会津コシヒカリ','なめこ'],
+  8: ['メロン','干し芋','れんこん','栗'],
+  9: ['いちご','かんぴょう','ゆば','ニラ'],
+  10: ['こんにゃく','下仁田ネギ','梅','しいたけ'],
+  11: ['狭山茶','深谷ネギ','さといも','小松菜'],
+  12: ['落花生','びわ','梨','海苔'],
+  13: ['小松菜','明日葉','江戸前海苔','ゆず'],
+  14: ['みかん','湘南しらす','大根','梅'],
+  15: ['コシヒカリ','ル レクチエ(洋梨)','枝豆','南蛮えび'],
+  16: ['白えび','コシヒカリ','りんご','里芋'],
+  17: ['加賀棒茶','加賀れんこん','能登ブルーベリー','のどぐろ'],
+  18: ['越前がに','梅','そば','里芋'],
+  19: ['ぶどう','桃','すもも','クレソン'],
+  20: ['りんご','わさび','野沢菜','そば','クルミ'],
+  21: ['鮎','栗','トマト','飛騨ほうれん草'],
+  22: ['お茶','みかん','わさび','桜えび','メロン'],
+  23: ['抹茶(西尾)','いちじく','大葉(しそ)','あさり','れんこん'],
+  24: ['伊勢えび','あおさ','みかん','伊勢茶'],
+  25: ['近江米','赤こんにゃく','アドベリー','鮎'],
+  26: ['抹茶(宇治)','京野菜(九条ネギ)','湯葉','万願寺とうがらし'],
+  27: ['泉州玉ねぎ','水なす','みかん','山椒'],
+  28: ['丹波黒豆','いかなご','いちじく','山田錦(酒米)'],
+  29: ['柿','大和茶','大和まな','三輪の小麦'],
+  30: ['梅(南高梅)','みかん','山椒','しらす'],
+  31: ['らっきょう','梨','松葉がに','長芋'],
+  32: ['しじみ','そば','のどぐろ','わかめ'],
+  33: ['桃','マスカット','ピオーネ','黄ニラ'],
+  34: ['牡蠣','レモン','広島菜','ネーブルオレンジ'],
+  35: ['夏みかん','はなっこりー','ふぐ','わかめ'],
+  36: ['すだち','鳴門金時','鳴門わかめ','ゆず'],
+  37: ['オリーブ','小豆','レモン','海苔'],
+  38: ['みかん','いよかん','裸麦','じゃこ(小魚)'],
+  39: ['かつお(鰹節)','ゆず','四万十青のり','文旦'],
+  40: ['あまおう(いちご)','八女茶','筑前海苔','柿'],
+  41: ['佐賀海苔','イカ','玉ねぎ','アスパラガス'],
+  42: ['びわ','じゃがいも','あご(トビウオ)','みかん'],
+  43: ['デコポン','からし菜','トマト','い草'],
+  44: ['かぼす','しいたけ','関あじ','ニラ'],
+  45: ['マンゴー','日向夏','きんかん','ゴボウ'],
+  46: ['さつまいも','きびなご','知覧茶','ポンカン'],
+  47: ['ゴーヤ','紅芋','パイナップル','シークヮーサー','もずく']
+};
+
+const suggestContainer = document.getElementById('suggest-cards');
+const ingredientInput = document.getElementById('form-ingredient');
+
+function renderSuggestCards(prefCode) {
+  suggestContainer.innerHTML = '';
+  const items = PREF_SUGGESTS[prefCode];
+  if (!items) return;
+
+  items.forEach(item => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'suggest-card';
+    card.textContent = item;
+    card.addEventListener('click', () => {
+      // 他のカードの選択を解除
+      suggestContainer.querySelectorAll('.suggest-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      ingredientInput.value = item;
+    });
+    suggestContainer.appendChild(card);
+  });
+
+  // 「自分で書く」ボタン
+  const writeOwn = document.createElement('button');
+  writeOwn.type = 'button';
+  writeOwn.className = 'suggest-card write-own';
+  writeOwn.textContent = '自分で書く';
+  writeOwn.addEventListener('click', () => {
+    suggestContainer.querySelectorAll('.suggest-card').forEach(c => c.classList.remove('selected'));
+    writeOwn.classList.add('selected');
+    ingredientInput.value = '';
+    ingredientInput.focus();
+  });
+  suggestContainer.appendChild(writeOwn);
+}
+
+// selectPref関数を拡張（元の関数にサジェスト表示を追加）
+const _originalSelectPref = selectPref;
+selectPref = function(code) {
+  _originalSelectPref(code);
+  renderSuggestCards(code);
+};
+
+// ========================================================
+// 8. ステータス切り替え機能
+// ========================================================
+async function loadVoteConfig() {
+  try {
+    const res = await fetch('vote_config.json?' + Date.now());
+    return await res.json();
+  } catch (e) {
+    console.warn('vote_config.json の読み込みに失敗:', e);
+    return null;
+  }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+function applyStatus(config) {
+  if (!config) return;
+  const s = config.status;
+  const pref = config.target_prefecture || '';
+  const first = config.result?.first || {};
+  const second = config.result?.second || {};
+  const third = config.result?.third || {};
+  const total = config.total_votes || 0;
+
+  // ── ヒーローのサブコピー ──
+  const heroDesc = document.getElementById('hero-description');
+  const heroSteps = document.querySelector('.hero-steps');
+  const heroCta = document.getElementById('vote-cta');
+
+  if (s === 'voting') {
+    heroDesc.innerHTML = '<p>あなたの故郷の味を、一杯のビールに。</p>'
+      + '<p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>';
+    if (heroSteps) heroSteps.style.display = '';
+    heroCta.style.display = '';
+  } else {
+    if (heroSteps) heroSteps.style.display = 'none';
+    heroCta.style.display = 'none';
+    const msgs = {
+      closed: `投票が締め切られました！<br>1位は${first.name}、${first.votes}票。<br>この声をビールにします。`,
+      brewing: `仕込みが始まりました！<br>${total}人の声が、いま醸造所にあります。`,
+      pre_sale: `もうすぐ完成します。<br>完成したら最初にお知らせします。`,
+      on_sale: `できました！<br>${pref}のビールです。<br>一緒に作ってくれて、ありがとうございます。`,
+      sold_out: `完売しました！<br>ありがとうございます。<br>次の県の投票、始めます。`
+    };
+    heroDesc.innerHTML = `<p>${msgs[s] || ''}</p>`;
+  }
+
+  // ── 地図セクションの説明文 ──
+  const mapDesc = document.getElementById('map-description');
+  if (s === 'voting') {
+    mapDesc.textContent = '投票が集まると、その県が光り始めます。';
+  } else {
+    mapDesc.textContent = `このビールには${total}票が集まりました。`;
+  }
+
+  // ── 投票フォームセクション ──
+  const formCard = document.getElementById('vote-form-card');
+  const formTitle = document.querySelector('.vote-form-title');
+  const formLabel = document.querySelector('.vote-form-label');
+
+  if (s === 'voting') {
+    // 投票中：フォームそのまま表示（デフォルト）
+    return;
+  }
+
+  // voting以外は既存フォームを差し替え
+  let html = '';
+
+  if (s === 'closed') {
+    formTitle.textContent = '投票結果';
+    formLabel.textContent = 'VOTE RESULT';
+    html = `<div class="status-message">
+      <h3>投票を締め切りました！</h3>
+      <div class="result-list">
+        <div class="result-item">
+          <span class="rank">1位</span>
+          <span class="name">${first.name}</span>
+          <span class="votes">${first.votes}票</span>
+        </div>
+        <div class="result-item">
+          <span class="rank">2位</span>
+          <span class="name">${second.name}</span>
+          <span class="votes">${second.votes}票</span>
+        </div>
+        <div class="result-item">
+          <span class="rank">3位</span>
+          <span class="name">${third.name}</span>
+          <span class="votes">${third.votes}票</span>
+        </div>
+      </div>
+      <div class="adopted">
+        <div class="adopted-label">ADOPTED INGREDIENT</div>
+        <div class="adopted-name">${first.name}（1位）</div>
+      </div>
+      <p style="margin-top:20px">この声をビールにします。</p>
+    </div>`;
+  }
+
+  if (s === 'brewing') {
+    const saleDate = new Date(config.sale_date);
+    const now = new Date();
+    const diffMs = saleDate - now;
+    const diffDays = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    const diffHours = Math.max(0, Math.floor((diffMs % (1000*60*60*24)) / (1000*60*60)));
+
+    formTitle.textContent = '醸造状況';
+    formLabel.textContent = 'BREWING STATUS';
+    html = `<div class="status-message">
+      <h3>仕込みが始まりました！</h3>
+      <div class="info-row">
+        <span class="info-label">醸造開始日</span>
+        <span class="info-value">${formatDate(config.brewing_start)}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">完成予定</span>
+        <span class="info-value">${formatDate(config.sale_date)}</span>
+      </div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-days">${diffDays}</div>
+          <div class="countdown-lbl">DAYS</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-hours">${diffHours}</div>
+          <div class="countdown-lbl">HOURS</div>
+        </div>
+      </div>
+      <p>${total}人の声が、いま醸造所にあります。<br>完成をお楽しみに。</p>
+    </div>`;
+  }
+
+  if (s === 'pre_sale') {
+    formTitle.textContent = '発売予定';
+    formLabel.textContent = 'COMING SOON';
+    html = `<div class="status-message">
+      <h3>もうすぐ完成します！</h3>
+      <div class="info-row">
+        <span class="info-label">発売日</span>
+        <span class="info-value">${formatDate(config.sale_date)}</span>
+      </div>
+      <p>完成したら最初にお知らせします。</p>
+      <div class="email-form">
+        <input type="email" placeholder="メールアドレス">
+        <button type="button">完成したら教えてください</button>
+      </div>
+    </div>`;
+  }
+
+  if (s === 'on_sale') {
+    formTitle.textContent = '販売中';
+    formLabel.textContent = 'NOW ON SALE';
+    html = `<div class="status-message">
+      <h3>できました！<br>${pref}のビールです。</h3>
+      <a href="${config.purchase_url || '#'}" class="purchase-btn" target="_blank" rel="noopener">購入する</a>
+    </div>`;
+  }
+
+  if (s === 'sold_out') {
+    formTitle.textContent = '完売';
+    formLabel.textContent = 'SOLD OUT';
+    html = `<div class="status-message">
+      <h3>完売しました！<br>ありがとうございます。</h3>
+      <p>次の県の投票、始めます。</p>
+      <div class="email-form">
+        <input type="email" placeholder="メールアドレス">
+        <button type="button">次の投票を教えてください</button>
+      </div>
+    </div>`;
+  }
+
+  formCard.innerHTML = html;
+
+  // カウントダウンタイマー（brewingの場合）
+  if (s === 'brewing' && config.sale_date) {
+    setInterval(() => {
+      const now = new Date();
+      const diff = new Date(config.sale_date) - now;
+      if (diff <= 0) return;
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const dEl = document.getElementById('cd-days');
+      const hEl = document.getElementById('cd-hours');
+      if (dEl) dEl.textContent = days;
+      if (hEl) hEl.textContent = hours;
+    }, 60000);
+  }
+}
+
+// ページ読み込み時に設定を取得して適用
+loadVoteConfig().then(applyStatus);
+
   </script>
 </body>
 </html>

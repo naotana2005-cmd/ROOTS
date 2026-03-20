@@ -8,7 +8,15 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(netstat -ano)",
       "Bash(findstr \":8081\")",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "WebSearch",
+      "WebFetch(domain:www.cowboycraftbrewing.com)",
+      "WebFetch(domain:ibbrewing.jp)",
+      "WebFetch(domain:spentgrain.co.jp)",
+      "WebFetch(domain:shokuhin-oem.jp)",
+      "WebFetch(domain:www.nta.go.jp)",
+      "WebFetch(domain:michi-kusa.co.jp)",
+      "WebFetch(domain:rec-cb.work)"
     ]
   }
 }

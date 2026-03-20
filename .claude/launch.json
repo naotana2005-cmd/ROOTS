@@ -7,6 +7,13 @@
       "runtimeArgs": ["-m", "http.server", "8081", "--directory", "web/site"],
       "port": 8081,
       "autoPort": false
+    },
+    {
+      "name": "logo-generator",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8082", "--directory", "brand/assets"],
+      "port": 8082,
+      "autoPort": false
     }
   ]
 }
