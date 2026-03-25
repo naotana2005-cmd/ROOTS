@@ -1444,10 +1444,35 @@ function applyStatus(config) {
   const heroSteps = document.querySelector('.hero-steps');
   const heroCta = document.getElementById('vote-cta');
 
-  if (s === 'voting') {
+  // ── ヒーローの統計表示 ──
+  const statNums = document.querySelectorAll('.stat-num');
+  const statLbls = document.querySelectorAll('.stat-lbl');
+
+  if (s === 'pre_voting') {
+    heroDesc.innerHTML = '<p>あなたの故郷の味を、一杯のビールに。</p>'
+      + '<p>まもなく、あなたの投票で始まります。</p>';
+    if (heroSteps) {
+      heroSteps.style.display = '';
+      heroSteps.innerHTML = '<span>① 出身地を登録</span>'
+        + '<span class="step-arrow">→</span>'
+        + '<span>② 投票で味を選ぶ</span>'
+        + '<span class="step-arrow">→</span>'
+        + '<span>③ ビールになる</span>';
+    }
+    heroCta.textContent = '出身地を登録する';
+    heroCta.style.display = '';
+    // 統計を変更
+    if (statNums.length >= 3 && statLbls.length >= 3) {
+      statNums[1].textContent = config.registration_count || '0';
+      statLbls[1].textContent = 'REGISTERED';
+      statNums[2].textContent = 'SOON';
+      statLbls[2].textContent = 'COMING';
+    }
+  } else if (s === 'voting') {
     heroDesc.innerHTML = '<p>あなたの故郷の味を、一杯のビールに。</p>'
       + '<p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>';
     if (heroSteps) heroSteps.style.display = '';
+    heroCta.textContent = 'あなたの県に投票する';
     heroCta.style.display = '';
   } else {
     if (heroSteps) heroSteps.style.display = 'none';
@@ -1464,7 +1489,15 @@ function applyStatus(config) {
 
   // ── 地図セクションの説明文 ──
   const mapDesc = document.getElementById('map-description');
-  if (s === 'voting') {
+  const mapHeadingEn = document.querySelector('.map-heading-en');
+  const mapHeadingJa = document.querySelector('.map-heading-ja');
+  if (s === 'pre_voting') {
+    if (mapHeadingEn) mapHeadingEn.textContent = 'REGISTRATION MAP';
+    if (mapHeadingJa) mapHeadingJa.textContent = '出身地マップ';
+    mapDesc.textContent = '登録が集まると、その県が光り始めます。';
+  } else if (s === 'voting') {
+    if (mapHeadingEn) mapHeadingEn.textContent = 'PARTICIPATION MAP';
+    if (mapHeadingJa) mapHeadingJa.textContent = '参加率マップ';
     mapDesc.textContent = '投票が集まると、その県が光り始めます。';
   } else {
     mapDesc.textContent = `このビールには${total}票が集まりました。`;
@@ -1474,6 +1507,80 @@ function applyStatus(config) {
   const formCard = document.getElementById('vote-form-card');
   const formTitle = document.querySelector('.vote-form-title');
   const formLabel = document.querySelector('.vote-form-label');
+
+  if (s === 'pre_voting') {
+    formTitle.textContent = '出身地登録';
+    formLabel.textContent = 'REGISTER YOUR HOMETOWN';
+    const formHtml = `<div class="status-message">
+      <p>投票が始まったら最初にお知らせします。</p>
+      <div class="form-selected-pref">
+        <div class="label">SELECTED PREFECTURE</div>
+        <div class="pref-selector" id="pref-selector-reg">
+          <span class="selector-text" id="selector-text-reg">出身地・縁のある県を選ぶ</span>
+          <span class="selector-arrow">›</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>メールアドレス</label>
+        <input type="email" id="form-email" placeholder="example@mail.com">
+      </div>
+      <div class="form-group">
+        <label>故郷への想いがあれば（任意）</label>
+        <textarea id="form-reg-message" placeholder="故郷への想いを一言..."></textarea>
+      </div>
+      <button class="form-submit" id="form-reg-submit" disabled>この県を登録する</button>
+    </div>`;
+    formCard.innerHTML = formHtml;
+
+    // 登録フォーム用のイベント設定
+    const regSelector = document.getElementById('pref-selector-reg');
+    const regText = document.getElementById('selector-text-reg');
+    const regSubmit = document.getElementById('form-reg-submit');
+    let regPrefCode = null;
+
+    if (regSelector) {
+      regSelector.addEventListener('click', () => {
+        // モーダルを開いて県を選択する（既存モーダルを流用）
+        const origSelectPref = selectPref;
+        selectPref = function(code) {
+          regPrefCode = code;
+          closeModal();
+          regText.textContent = PREF_NAMES[code];
+          regSelector.classList.add('selected');
+          regSubmit.disabled = !document.getElementById('form-email')?.value;
+          selectPref = origSelectPref;
+        };
+        openModal();
+      });
+    }
+
+    // メール入力でボタン有効化
+    const emailInput = document.getElementById('form-email');
+    if (emailInput) {
+      emailInput.addEventListener('input', () => {
+        regSubmit.disabled = !(regPrefCode && emailInput.value);
+      });
+    }
+
+    // 登録ボタン
+    if (regSubmit) {
+      regSubmit.addEventListener('click', () => {
+        if (!regPrefCode || !emailInput?.value) return;
+        // 登録完了画面を表示
+        formCard.innerHTML = `<div class="status-message">
+          <h3>あなたの声、受け取りました。</h3>
+          <p>投票が始まったら最初にお知らせします。</p>
+          <p style="margin-top:16px;font-size:0.85rem;color:#666">${PREF_NAMES[regPrefCode]}は現在の登録中です。</p>
+          <div class="share-buttons" style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button class="suggest-card" onclick="navigator.clipboard.writeText(location.href).then(()=>this.textContent='コピーしました！')">リンクをコピー</button>
+            <a class="suggest-card" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(PREF_NAMES[regPrefCode] + '出身です。この県の味がビールになるかも。 #ROOTS #親愛なる故郷へ')}&url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">Xでシェア</a>
+            <a class="suggest-card" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">LINEでシェア</a>
+          </div>
+        </div>`;
+      });
+    }
+    return;
+  }
 
   if (s === 'voting') {
     // 投票中：フォームそのまま表示（デフォルト）

@@ -1,16 +1,17 @@
 {
-  "status": "voting",
+  "status": "pre_voting",
   "round": 1,
-  "target_prefecture": "大阪府",
-  "vote_start": "2026-04-01",
-  "vote_end": "2026-04-30",
+  "target_prefecture": "",
+  "vote_start": "2026-07-01",
+  "vote_end": "2026-07-31",
   "result": {
-    "first": { "name": "泉州玉ねぎ", "votes": 142 },
-    "second": { "name": "水なす", "votes": 98 },
-    "third": { "name": "みかん", "votes": 64 }
+    "first": { "name": "", "votes": 0 },
+    "second": { "name": "", "votes": 0 },
+    "third": { "name": "", "votes": 0 }
   },
-  "brewing_start": "2026-05-01",
-  "sale_date": "2026-07-01",
-  "total_votes": 312,
+  "brewing_start": "",
+  "sale_date": "",
+  "total_votes": 0,
+  "registration_count": 0,
   "purchase_url": ""
 }
