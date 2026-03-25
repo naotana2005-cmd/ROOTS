@@ -1201,6 +1201,31 @@ async function loadJapanMap() {
   }
 }
 
+// 選択された県を地図上で緑に光らせる
+function highlightSelectedPref(code) {
+  const svg = d3.select('#japan-map');
+  if (svg.empty()) return;
+
+  // 全県の色をリセット
+  svg.selectAll('path.pref')
+    .attr('fill', d => {
+      const pid = d.id || d.properties.id;
+      return getTierColor(currentVoteData[pid] || 0, POPULATION[pid] || 1);
+    })
+    .attr('stroke', '#50A0F0')
+    .attr('stroke-width', 0.5);
+
+  // 選択された県を緑に光らせる
+  svg.selectAll('path.pref')
+    .filter(d => {
+      const pid = d.id || d.properties.id;
+      return pid === code || pid === String(code);
+    })
+    .attr('fill', 'rgba(80,240,120,0.5)')
+    .attr('stroke', '#60FF90')
+    .attr('stroke-width', 2);
+}
+
 // ========================================================
 // 4. 投票モーダル
 // ========================================================
@@ -1244,12 +1269,17 @@ function showPrefStep(region) {
 function selectPref(code) {
   selectedPrefCode = code;
   closeModal();
-  // フォームに反映
+  // フォームに反映（要素が存在する場合のみ）
   const selectorEl = document.getElementById('pref-selector');
   const textEl = document.getElementById('selector-text');
-  textEl.textContent = PREF_NAMES[code];
-  selectorEl.classList.add('selected');
-  document.getElementById('form-submit').disabled = false;
+  if (textEl) textEl.textContent = PREF_NAMES[code];
+  if (selectorEl) selectorEl.classList.add('selected');
+  const submitBtn = document.getElementById('form-submit');
+  if (submitBtn) submitBtn.disabled = false;
+
+  // 地図上で選択された県を緑に光らせる
+  highlightSelectedPref(code);
+
   // 投票フォームへスクロール
   document.getElementById('vote-form-section').scrollIntoView({ behavior: 'smooth' });
 }
