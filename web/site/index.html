@@ -1308,7 +1308,16 @@ voteModal.addEventListener('click', (e) => {
 });
 
 // CTAボタンからモーダルを開く
-document.getElementById('vote-cta').addEventListener('click', openModal);
+document.getElementById('vote-cta').addEventListener('click', () => {
+  // pre_votingモード：フォームの県セレクターをクリックしたのと同じ動作
+  const regSelector = document.getElementById('pref-selector-reg');
+  if (regSelector) {
+    regSelector.click();
+    return;
+  }
+  // 通常モード：そのままモーダルを開く
+  openModal();
+});
 
 // フォームの都道府県セレクター
 document.getElementById('pref-selector').addEventListener('click', openModal);
@@ -1578,6 +1587,8 @@ function applyStatus(config) {
           regText.textContent = PREF_NAMES[code];
           regSelector.classList.add('selected');
           regSubmit.disabled = !document.getElementById('form-email')?.value;
+          // 地図上で選択された県を緑に光らせる
+          highlightSelectedPref(code);
           selectPref = origSelectPref;
         };
         openModal();
