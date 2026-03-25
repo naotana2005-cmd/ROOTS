@@ -917,8 +917,61 @@
   <!-- D3.js & TopoJSON -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+// ========================================================
+// 0. Supabase初期化 & デバイスID管理
+// ========================================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+let sb = null;
+try {
+  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && window.supabase) {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch(e) { console.warn('Supabase初期化スキップ:', e); }
+
+function getDeviceId() {
+  let id = localStorage.getItem('roots_device_id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('roots_device_id', id);
+  }
+  return id;
+}
+
+async function getRegistrationData() {
+  if (!sb) return {};
+  try {
+    const { data, error } = await sb.from('registration_counts').select('pref_code, count');
+    if (error) throw error;
+    return data.reduce((acc, r) => { acc[r.pref_code] = r.count; return acc; }, {});
+  } catch(e) {
+    console.warn('登録データ取得エラー:', e);
+    return {};
+  }
+}
+
+async function upsertRegistration(prefCode, email, message) {
+  if (!sb) {
+    console.warn('Supabase未接続: ローカルのみ保存');
+    localStorage.setItem('roots_registered_pref', prefCode);
+    return { error: null };
+  }
+  const deviceId = getDeviceId();
+  const { error } = await sb
+    .from('registrations')
+    .upsert(
+      { device_id: deviceId, pref_code: prefCode, email: email || null, message: message || null },
+      { onConflict: 'device_id' }
+    );
+  if (!error) {
+    localStorage.setItem('roots_registered_pref', prefCode);
+  }
+  return { error };
+}
 // ========================================================
 // 1. ロゴイントロアニメーション
 // ========================================================
@@ -1070,16 +1123,30 @@ const DUMMY_VOTES = {
   45:28,46:55,47:89
 };
 
-// Supabase接続準備：この関数を差し替えるだけでOK
+// データ取得：pre_votingは登録数、votingは投票数
+let currentStatus = 'voting'; // applyStatusで更新される
 async function getVoteData() {
-  // TODO: Supabase接続時はここを書き換える
-  // const { data } = await supabase.from('votes').select('pref_id, count');
-  // return data.reduce((acc, r) => { acc[r.pref_id] = r.count; return acc; }, {});
+  // pre_votingモード：Supabaseの登録数を取得
+  if (currentStatus === 'pre_voting') {
+    const regData = await getRegistrationData();
+    if (Object.keys(regData).length > 0) return regData;
+    return {}; // 登録がなければ空（地図は暗い状態）
+  }
+  // votingモード以降：ダミーデータ（将来Supabase接続）
   return { ...DUMMY_VOTES };
 }
 
-// 参加率に応じた6段階カラー（既存アクセント #50A0F0 = rgb(80,160,240) ベース）
+// 参加率に応じた6段階カラー
 function getTierColor(votes, population) {
+  // pre_votingモードでは登録数ベースの閾値を使用
+  if (currentStatus === 'pre_voting') {
+    if (!votes || votes === 0) return 'rgba(80,160,240,0.02)';
+    if (votes < 3) return 'rgba(80,160,240,0.10)';
+    if (votes < 10) return 'rgba(80,160,240,0.20)';
+    if (votes < 30) return 'rgba(80,160,240,0.35)';
+    if (votes < 100) return 'rgba(80,160,240,0.50)';
+    return 'rgba(80,160,240,0.65)';
+  }
   if (!votes || votes === 0) return 'rgba(80,160,240,0.02)';
   const rate = votes / population;
   if (rate < 0.00003) return 'rgba(80,160,240,0.08)';
@@ -1310,10 +1377,29 @@ voteModal.addEventListener('click', (e) => {
 
 // CTAボタンからモーダルを開く
 document.getElementById('vote-cta').addEventListener('click', () => {
-  // pre_votingモード：フォームの県セレクターをクリックしたのと同じ動作
+  // pre_votingモード：直接モーダルを開き、県選択後に地図へスクロール
   const regSelector = document.getElementById('pref-selector-reg');
   if (regSelector) {
-    regSelector.click();
+    const origSelectPref = selectPref;
+    selectPref = function(code) {
+      selectedPrefCode = code;
+      closeModal();
+      // フォーム側の表示も更新
+      const regText = document.getElementById('selector-text-reg');
+      if (regText) regText.textContent = PREF_NAMES[code];
+      if (regSelector) regSelector.classList.add('selected');
+      const regSubmit = document.getElementById('form-reg-submit');
+      if (regSubmit) regSubmit.disabled = false;
+      // 地図上で選択県を緑にハイライト
+      highlightSelectedPref(code);
+      // 地図セクションへスクロール
+      const mapSec = document.getElementById('map-section');
+      if (mapSec) {
+        setTimeout(() => mapSec.scrollIntoView({ behavior: 'smooth' }), 200);
+      }
+      selectPref = origSelectPref;
+    };
+    openModal();
     return;
   }
   // 通常モード：そのままモーダルを開く
@@ -1473,6 +1559,7 @@ function formatDate(dateStr) {
 function applyStatus(config) {
   if (!config) return;
   const s = config.status;
+  currentStatus = s; // グローバル変数を更新
   const pref = config.target_prefecture || '';
   const first = config.result?.first || {};
   const second = config.result?.second || {};
@@ -1601,13 +1688,34 @@ function applyStatus(config) {
       });
     }
 
+    // 再訪問時：登録済みなら復元表示
+    const savedPref = localStorage.getItem('roots_registered_pref');
+    if (savedPref) {
+      const savedCode = parseInt(savedPref);
+      regPrefCode = savedCode;
+      regText.textContent = PREF_NAMES[savedCode] + '（登録済み）';
+      regSelector.classList.add('selected');
+      regSubmit.disabled = false;
+      regSubmit.textContent = '登録を変更する';
+      // 地図もハイライト
+      setTimeout(() => highlightSelectedPref(savedCode), 1000);
+    }
+
     // メール入力欄の参照
     const emailInput = document.getElementById('form-email');
 
     // 登録ボタン
     if (regSubmit) {
-      regSubmit.addEventListener('click', () => {
+      regSubmit.addEventListener('click', async () => {
         if (!regPrefCode) return;
+        regSubmit.disabled = true;
+        regSubmit.textContent = '登録中...';
+
+        // Supabaseに保存（未接続時はlocalStorageのみ）
+        const email = document.getElementById('form-email')?.value || null;
+        const message = document.getElementById('form-reg-message')?.value || null;
+        await upsertRegistration(regPrefCode, email, message);
+
         // 登録完了画面を表示
         formCard.innerHTML = `<div class="status-message">
           <h3>あなたの声、受け取りました。</h3>
