@@ -327,8 +327,9 @@
 
     /* スクロールヒント */
     .scroll-hint {
-      position: absolute; bottom: 24px; left: 50%;
-      transform: translateX(-50%); z-index: 2; text-align: center;
+      position: absolute; bottom: 24px; left: 0; right: 0;
+      margin: 0 auto; width: fit-content;
+      z-index: 2; text-align: center;
       animation: fadeUp 0.8s ease-out 1.4s both;
     }
     .scroll-hint .arr {
@@ -889,7 +890,7 @@
       <div class="form-selected-pref">
         <div class="label">SELECTED PREFECTURE</div>
         <div class="pref-selector" id="pref-selector">
-          <span class="selector-text" id="selector-text">出身地・縁のある県を選ぶ</span>
+          <span class="selector-text" id="selector-text">あなたの故郷を選ぶ</span>
           <span class="selector-arrow">›</span>
         </div>
       </div>
@@ -1555,13 +1556,13 @@ function applyStatus(config) {
       <div class="form-selected-pref">
         <div class="label">SELECTED PREFECTURE</div>
         <div class="pref-selector" id="pref-selector-reg">
-          <span class="selector-text" id="selector-text-reg">出身地・縁のある県を選ぶ</span>
+          <span class="selector-text" id="selector-text-reg">あなたの故郷を選ぶ</span>
           <span class="selector-arrow">›</span>
         </div>
       </div>
       <div class="form-group">
-        <label>メールアドレス</label>
-        <input type="email" id="form-email" placeholder="example@mail.com">
+        <label>メールアドレス（任意）</label>
+        <input type="email" id="form-email" placeholder="投票開始時にお知らせします">
       </div>
       <div class="form-group">
         <label>故郷への想いがあれば（任意）</label>
@@ -1586,27 +1587,27 @@ function applyStatus(config) {
           closeModal();
           regText.textContent = PREF_NAMES[code];
           regSelector.classList.add('selected');
-          regSubmit.disabled = !document.getElementById('form-email')?.value;
+          regSubmit.disabled = false;
           // 地図上で選択された県を緑に光らせる
           highlightSelectedPref(code);
+          // 地図セクションまでスクロール
+          const mapSec = document.getElementById('map-section');
+          if (mapSec) {
+            setTimeout(() => mapSec.scrollIntoView({ behavior: 'smooth' }), 200);
+          }
           selectPref = origSelectPref;
         };
         openModal();
       });
     }
 
-    // メール入力でボタン有効化
+    // メール入力欄の参照
     const emailInput = document.getElementById('form-email');
-    if (emailInput) {
-      emailInput.addEventListener('input', () => {
-        regSubmit.disabled = !(regPrefCode && emailInput.value);
-      });
-    }
 
     // 登録ボタン
     if (regSubmit) {
       regSubmit.addEventListener('click', () => {
-        if (!regPrefCode || !emailInput?.value) return;
+        if (!regPrefCode) return;
         // 登録完了画面を表示
         formCard.innerHTML = `<div class="status-message">
           <h3>あなたの声、受け取りました。</h3>
