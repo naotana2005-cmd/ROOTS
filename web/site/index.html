@@ -346,6 +346,7 @@
       font-family: 'Space Mono', monospace; font-size: 0.5rem;
       color: #444; letter-spacing: 0.2em; margin-top: 6px;
     }
+    #map-section .scroll-hint { animation: none; opacity: 1; }
 
     /* モバイル向けヒーロー調整 */
     @media (max-width: 768px) {
@@ -857,6 +858,11 @@
       <div class="map-description" id="map-description">投票が集まると、その県が光り始めます。</div>
       <svg id="japan-map"></svg>
     </div>
+
+    <div class="scroll-hint">
+      <div class="arr"></div>
+      <div class="sl">SCROLL</div>
+    </div>
   </section>
 
   <!-- ===== 3. 投票モーダル ===== -->
@@ -867,7 +873,7 @@
       <!-- STEP1: 地方選択 -->
       <div class="modal-step active" id="modal-step1">
         <div class="modal-step-label">STEP 1</div>
-        <div class="modal-title">地方を選んでください</div>
+        <div class="modal-title">地方を選ぶ</div>
         <div class="region-grid" id="region-grid"></div>
       </div>
 
@@ -875,7 +881,7 @@
       <div class="modal-step" id="modal-step2">
         <button class="modal-back" id="modal-back">← 地方に戻る</button>
         <div class="modal-step-label">STEP 2</div>
-        <div class="modal-title" id="step2-title">都道府県を選んでください</div>
+        <div class="modal-title" id="step2-title">都道府県を選ぶ</div>
         <div class="pref-grid" id="pref-grid"></div>
       </div>
     </div>
@@ -1324,7 +1330,7 @@ Object.keys(REGIONS).forEach(region => {
 function showPrefStep(region) {
   modalStep1.classList.remove('active');
   modalStep2.classList.add('active');
-  step2Title.textContent = region + ' の都道府県を選んでください';
+  step2Title.textContent = region + 'の都道府県を選ぶ';
   prefGrid.innerHTML = '';
   REGIONS[region].forEach(code => {
     const btn = document.createElement('button');
@@ -1650,7 +1656,7 @@ function applyStatus(config) {
       </div>
       <div class="form-group">
         <label>メールアドレス（任意）</label>
-        <input type="email" id="form-email" placeholder="投票開始時にお知らせします">
+        <input type="email" id="form-email" placeholder="投票が始まったらお知らせします">
       </div>
       <div class="form-group">
         <label>故郷への想いがあれば（任意）</label>
@@ -1721,7 +1727,7 @@ function applyStatus(config) {
         formCard.innerHTML = `<div class="status-message">
           <h3>あなたの声、受け取りました。</h3>
           <p>投票が始まったら最初にお知らせします。</p>
-          <p style="margin-top:16px;font-size:0.85rem;color:#666">${PREF_NAMES[regPrefCode]}は現在の登録中です。</p>
+          <p style="margin-top:16px;font-size:0.85rem;color:#666">${PREF_NAMES[regPrefCode]}で登録しました。</p>
           <div class="share-buttons" style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
             <button class="suggest-card" onclick="navigator.clipboard.writeText(location.href).then(()=>this.textContent='コピーしました！')">リンクをコピー</button>
             <a class="suggest-card" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(PREF_NAMES[regPrefCode] + '出身です。この県の味がビールになるかも。 #ROOTS #親愛なる故郷へ')}&url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">Xでシェア</a>
