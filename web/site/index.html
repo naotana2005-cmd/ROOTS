@@ -1605,12 +1605,15 @@ function applyStatus(config) {
     }
     heroCta.textContent = '出身地を登録する';
     heroCta.style.display = '';
-    // 統計を変更
+    // 統計を変更（Supabaseからリアルタイム取得）
     if (statNums.length >= 3 && statLbls.length >= 3) {
-      statNums[1].textContent = config.registration_count || '0';
+      getRegistrationData().then(regData => {
+        const totalReg = Object.values(regData).reduce((sum, v) => sum + v, 0);
+        statNums[1].textContent = totalReg;
+      });
       statLbls[1].textContent = 'REGISTERED';
-      statNums[2].textContent = 'SOON';
-      statLbls[2].textContent = 'COMING';
+      statNums[2].textContent = 'COMING';
+      statLbls[2].textContent = 'SOON';
     }
   } else if (s === 'voting') {
     heroDesc.innerHTML = '<p>あなたの故郷の味を、一杯のビールに。</p>'
@@ -1694,11 +1697,7 @@ function applyStatus(config) {
           regSubmit.disabled = false;
           // 地図上で選択された県を緑に光らせる
           highlightSelectedPref(code);
-          // 地図セクションまでスクロール
-          const mapSec = document.getElementById('map-section');
-          if (mapSec) {
-            setTimeout(() => mapSec.scrollIntoView({ behavior: 'smooth' }), 200);
-          }
+          // フォームからの選択時はスクロールしない（フォームの下にいるため）
           selectPref = origSelectPref;
         };
         openModal();
