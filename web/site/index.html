@@ -1219,9 +1219,14 @@ async function loadJapanMap() {
     if (!popup) {
       popup = document.createElement('div');
       popup.className = 'map-popup';
-      popup.innerHTML = '<div class="map-popup-name"></div>'
-        + '<div class="map-popup-row"><span>投票数</span><span class="map-popup-val" id="popup-votes"></span></div>'
-        + '<div class="map-popup-row"><span>参加率</span><span class="map-popup-val" id="popup-rate"></span></div>';
+      if (currentStatus === 'pre_voting') {
+        popup.innerHTML = '<div class="map-popup-name"></div>'
+          + '<div class="map-popup-row"><span>登録数</span><span class="map-popup-val" id="popup-votes"></span></div>';
+      } else {
+        popup.innerHTML = '<div class="map-popup-name"></div>'
+          + '<div class="map-popup-row"><span>投票数</span><span class="map-popup-val" id="popup-votes"></span></div>'
+          + '<div class="map-popup-row"><span>参加率</span><span class="map-popup-val" id="popup-rate"></span></div>';
+      }
       mapContainer.appendChild(popup);
     }
 
@@ -1256,8 +1261,13 @@ async function loadJapanMap() {
         const rate = ((votes / pop) * 100).toFixed(4);
 
         popup.querySelector('.map-popup-name').textContent = name;
-        popup.querySelector('#popup-votes').textContent = votes.toLocaleString() + ' 票';
-        popup.querySelector('#popup-rate').textContent = rate + '%';
+        if (currentStatus === 'pre_voting') {
+          popup.querySelector('#popup-votes').textContent = votes.toLocaleString() + ' 人';
+        } else {
+          popup.querySelector('#popup-votes').textContent = votes.toLocaleString() + ' 票';
+          const rateEl = popup.querySelector('#popup-rate');
+          if (rateEl) rateEl.textContent = rate + '%';
+        }
 
         // ポップアップ位置
         const rect = mapContainer.getBoundingClientRect();
@@ -1723,6 +1733,10 @@ function applyStatus(config) {
         const message = document.getElementById('form-reg-message')?.value || null;
         await upsertRegistration(regPrefCode, email, message);
 
+        // 地図のデータを更新
+        currentVoteData = await getVoteData();
+        loadJapanMap();
+
         // 登録完了画面を表示
         formCard.innerHTML = `<div class="status-message">
           <h3>あなたの声、受け取りました。</h3>
@@ -1733,6 +1747,7 @@ function applyStatus(config) {
             <a class="suggest-card" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(PREF_NAMES[regPrefCode] + '出身です。この県の味がビールになるかも。 #ROOTS #親愛なる故郷へ')}&url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">Xでシェア</a>
             <a class="suggest-card" href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(location.href)}" target="_blank" rel="noopener">LINEでシェア</a>
           </div>
+          <p style="margin-top:16px"><button class="suggest-card write-own" onclick="location.reload()">県を変更する</button></p>
         </div>`;
       });
     }
