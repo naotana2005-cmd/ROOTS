@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="あなたの故郷の味を、一杯のビールに。出身地の食材を投票で選び、クラフトビールを醸す参加型プロジェクト。">
+  <meta name="theme-color" content="#090909">
+  <!-- OGP -->
+  <meta property="og:title" content="ROOTS — 親愛なる故郷へ">
+  <meta property="og:description" content="出身地の食材を投票で選び、クラフトビールを醸す。あなたのルーツが、ビールになります。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://roots-brewing.com">
+  <meta property="og:site_name" content="ROOTS">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ROOTS — 親愛なる故郷へ">
+  <meta name="twitter:description" content="出身地の食材を投票で選び、クラフトビールを醸す。">
   <title>ROOTS — 親愛なる故郷へ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,6 +252,57 @@
       font-size: 0.6rem;
     }
 
+    /* ROOTSとは セクション */
+    #how-it-works {
+      padding: 80px 24px;
+      background: rgba(255,255,255,0.02);
+      text-align: center;
+    }
+    .how-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.4em;
+      color: #50A0F0; margin-bottom: 8px;
+    }
+    .how-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700; color: #e0e0e0;
+      margin-bottom: 48px;
+    }
+    .how-steps-grid {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; max-width: 800px; margin: 0 auto;
+    }
+    .how-step {
+      flex: 1; text-align: center; padding: 24px 12px;
+    }
+    .how-step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .how-step-icon { font-size: 2rem; margin: 12px 0; }
+    .how-step-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem; font-weight: 700;
+      color: #e0e0e0; margin-bottom: 8px;
+    }
+    .how-step-desc {
+      font-size: 0.75rem; color: #888; line-height: 1.6;
+    }
+    .how-step-arrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem; color: #555; flex-shrink: 0;
+    }
+    @media (max-width: 600px) {
+      .how-steps-grid { flex-direction: column; gap: 8px; }
+      .how-step-arrow { transform: rotate(90deg); font-size: 1rem; }
+      .how-step { padding: 16px 12px; }
+      #how-it-works { padding: 60px 20px; }
+    }
+
     /* 日本地図セクション */
     #map-section {
       min-height: 100vh;
@@ -308,6 +371,16 @@
     }
     .hero-cta:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; transform: translateY(-3px) scale(1.02); }
     .hero-cta:hover::after { opacity: 0.6; }
+
+    .hero-cta-sub {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.7rem;
+      color: #666;
+      z-index: 2;
+      margin-top: 10px;
+      text-align: center;
+      animation: fadeUp 0.8s ease-out 1.1s both;
+    }
 
     .hero-stats {
       display: flex; gap: 36px; margin-top: 24px;
@@ -632,6 +705,35 @@
       border-style: dashed;
     }
 
+    /* フッター */
+    #site-footer {
+      padding: 40px 24px;
+      border-top: 1px solid rgba(80,160,240,0.1);
+      background: #090909;
+      text-align: center;
+    }
+    .footer-inner { max-width: 600px; margin: 0 auto; }
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem; letter-spacing: 0.15em;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 12px;
+    }
+    .footer-links {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: #555;
+      letter-spacing: 0.08em; margin-bottom: 16px;
+    }
+    .footer-links a { color: #666; transition: color 0.2s; }
+    .footer-links a:hover { color: #50A0F0; }
+    .footer-sep { margin: 0 12px; color: #333; }
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.5rem; color: #333;
+      letter-spacing: 0.05em;
+    }
+
     /* ステータス別表示 */
     .status-message {
       text-align: center;
@@ -825,7 +927,7 @@
 
     <div class="hero-description" id="hero-description">
       <p>あなたの故郷の味を、一杯のビールに。</p>
-      <p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>
+      <p>出身地の食材を投票で選び、ビールを醸す。</p>
     </div>
 
     <div class="hero-steps">
@@ -837,6 +939,7 @@
     </div>
 
     <button class="hero-cta" id="vote-cta">あなたの県に投票する</button>
+    <div class="hero-cta-sub" id="hero-cta-sub"></div>
 
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">47</div><div class="stat-lbl">PREFECTURES</div></div>
@@ -847,6 +950,34 @@
     <div class="scroll-hint">
       <div class="arr"></div>
       <div class="sl">SCROLL</div>
+    </div>
+  </section>
+
+  <!-- ===== 2.3 ROOTSとは セクション ===== -->
+  <section id="how-it-works">
+    <div class="how-label">HOW IT WORKS</div>
+    <div class="how-title">あなたの声が、ビールになるまで</div>
+    <div class="how-steps-grid">
+      <div class="how-step">
+        <div class="how-step-num">01</div>
+        <div class="how-step-icon">🗾</div>
+        <div class="how-step-name">出身地を選ぶ</div>
+        <div class="how-step-desc">あなたの故郷を教えてください。</div>
+      </div>
+      <div class="how-step-arrow">→</div>
+      <div class="how-step">
+        <div class="how-step-num">02</div>
+        <div class="how-step-icon">🌾</div>
+        <div class="how-step-name">味を投票する</div>
+        <div class="how-step-desc">その土地の食材を提案します。</div>
+      </div>
+      <div class="how-step-arrow">→</div>
+      <div class="how-step">
+        <div class="how-step-num">03</div>
+        <div class="how-step-icon">🍺</div>
+        <div class="how-step-name">ビールになる</div>
+        <div class="how-step-desc">1位の食材で醸造が始まります。</div>
+      </div>
     </div>
   </section>
 
@@ -907,7 +1038,7 @@
         </label>
         <div class="help-content" id="help-content">
           <p>野菜・果物・海産物・茶葉など、<br>その土地で育った素材を教えてください。<br>鰹節や昆布などの乾燥素材もOKです。</p>
-          <p>たこ焼きなどの調理済み料理は<br>醸造の素材として使いにくいため、<br>素材そのものを教えてもらえると助かります。</p>
+          <p>たこ焼きなどの調理済み料理は<br>醸造の素材として使いにくいため、<br>素材そのものを教えてください。</p>
         </div>
         <div class="suggest-cards" id="suggest-cards"></div>
         <input type="text" id="form-ingredient" placeholder="例：泉州玉ねぎ、山椒、みかん...">
@@ -919,6 +1050,19 @@
       <button class="form-submit" id="form-submit" disabled>この味をビールにする</button>
     </div>
   </section>
+
+  <!-- ===== フッター ===== -->
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">ROOTS BREWING</div>
+      <div class="footer-links">
+        <a href="mailto:contact@roots-brewing.com">お問い合わせ</a>
+        <span class="footer-sep">|</span>
+        <a href="https://instagram.com/rootsbrewing" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <div class="footer-copy">© 2026 ROOTS BREWING. All rights reserved.</div>
+    </div>
+  </footer>
 
   <!-- D3.js & TopoJSON & Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -1605,6 +1749,8 @@ function applyStatus(config) {
     }
     heroCta.textContent = '出身地を登録する';
     heroCta.style.display = '';
+    const ctaSub = document.getElementById('hero-cta-sub');
+    if (ctaSub) ctaSub.textContent = '登録が多い県から、最初のビールを作ります。';
     // 統計を変更（Supabaseからリアルタイム取得）
     if (statNums.length >= 3 && statLbls.length >= 3) {
       getRegistrationData().then(regData => {
@@ -1617,10 +1763,12 @@ function applyStatus(config) {
     }
   } else if (s === 'voting') {
     heroDesc.innerHTML = '<p>あなたの故郷の味を、一杯のビールに。</p>'
-      + '<p>都道府県民の投票で選ばれた副原料で醸す、<br>世界にひとつの参加型クラフトビール。</p>';
+      + '<p>出身地の食材を投票で選び、ビールを醸す。</p>';
     if (heroSteps) heroSteps.style.display = '';
     heroCta.textContent = 'あなたの県に投票する';
     heroCta.style.display = '';
+    const ctaSub2 = document.getElementById('hero-cta-sub');
+    if (ctaSub2) ctaSub2.textContent = '';
   } else {
     if (heroSteps) heroSteps.style.display = 'none';
     heroCta.style.display = 'none';
