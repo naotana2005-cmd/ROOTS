@@ -487,9 +487,10 @@
       background: rgba(9,9,9,0.96);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; visibility: hidden;
+      pointer-events: none;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .vote-modal.open { opacity: 1; visibility: visible; }
+    .vote-modal.open { opacity: 1; visibility: visible; pointer-events: auto; }
     .modal-content {
       position: relative;
       width: 90%; max-width: 560px;
@@ -1058,7 +1059,7 @@
       <div class="footer-links">
         <a href="mailto:contact@roots-brewing.com">お問い合わせ</a>
         <span class="footer-sep">|</span>
-        <a href="https://instagram.com/rootsbrewing" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://instagram.com/roots_brewing" target="_blank" rel="noopener">Instagram</a>
       </div>
       <div class="footer-copy">© 2026 ROOTS BREWING. All rights reserved.</div>
     </div>
