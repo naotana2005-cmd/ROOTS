@@ -55,7 +55,7 @@
     .card-preview.show { display: block; }
 
     .roots-card {
-      width: 320px; height: 480px;
+      width: 320px; height: 520px;
       border-radius: 14px; padding: 0;
       position: relative; overflow: hidden;
       background: linear-gradient(180deg, #0f1218 0%, #0a0a0a 100%);
@@ -104,12 +104,12 @@
     .card-pref-svg-wrap.from svg path { fill: #50A0F0; filter: drop-shadow(0 0 6px rgba(80,160,240,0.4)); }
     .card-pref-svg-wrap.to svg path { fill: #F0A032; filter: drop-shadow(0 0 6px rgba(240,160,50,0.4)); }
     .card-pref-tag {
-      font-family: 'Space Mono', monospace; font-size: 0.4rem; letter-spacing: 0.15em;
-      color: #555; margin-bottom: 6px; text-transform: uppercase;
+      font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em;
+      color: #666; margin-bottom: 4px;
     }
     .card-pref-name-label {
-      font-family: 'Shippori Mincho', serif; font-size: 0.8rem; font-weight: 700;
-      margin-top: 6px;
+      font-family: 'Shippori Mincho', serif; font-size: 0.85rem; font-weight: 700;
+      margin-top: 4px;
     }
     .card-pref-block.from .card-pref-name-label { color: #60B0FF; }
     .card-pref-block.to .card-pref-name-label { color: #FFC050; }
@@ -119,12 +119,12 @@
       margin: 0 8px;
     }
     .card-arrow-icon {
-      font-size: 1.6rem; color: #444;
+      font-size: 1.8rem;
       background: linear-gradient(90deg, #60B0FF, #FFC050);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .card-arrow-km {
-      font-family: 'Space Mono', monospace; font-size: 0.45rem; color: #555;
+      font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #666;
     }
 
     /* 区切り線 */
@@ -144,11 +144,12 @@
 
     /* フレーバー */
     .card-flavor-area {
-      padding: 6px 20px 10px; text-align: center;
+      padding: 8px 18px 12px; text-align: center; flex: 1;
+      display: flex; align-items: center; justify-content: center;
     }
     .card-flavor-text {
-      font-family: 'Shippori Mincho', serif; font-size: 0.6rem;
-      color: #888; font-style: italic; line-height: 1.8;
+      font-family: 'Shippori Mincho', serif; font-size: 0.7rem;
+      color: #999; font-style: italic; line-height: 2;
     }
 
     /* フッター */
@@ -180,9 +181,10 @@
     .card-page-footer { margin-top: 48px; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.5rem; color: #333; }
 
     @media (max-width: 380px) {
-      .roots-card { width: 290px; height: 435px; }
+      .roots-card { width: 290px; height: 475px; }
       .card-pref-svg-wrap { width: 65px; height: 65px; }
       .card-top-name { font-size: 1rem; }
+      .card-flavor-text { font-size: 0.6rem; }
     }
   </style>
 </head>
@@ -223,7 +225,7 @@
       <div class="card-divider"></div>
       <div class="card-visual-area">
         <div class="card-pref-block from">
-          <div class="card-pref-tag">FROM</div>
+          <div class="card-pref-tag">出身</div>
           <div class="card-pref-svg-wrap from" id="card-from-svg"></div>
           <div class="card-pref-name-label" id="card-from-name"></div>
         </div>
@@ -232,7 +234,7 @@
           <div class="card-arrow-km" id="card-dist"></div>
         </div>
         <div class="card-pref-block to">
-          <div class="card-pref-tag">NOW</div>
+          <div class="card-pref-tag">現在</div>
           <div class="card-pref-svg-wrap to" id="card-to-svg"></div>
           <div class="card-pref-name-label" id="card-to-name"></div>
         </div>
@@ -300,19 +302,35 @@ const PREF_COORDS = {
 };
 
 const FLAVOR_TEXTS = {
-  same: ['地元を離れなかった、最強のルーツ保持者。','この土地に根を張り続ける覚悟。それもまた冒険。','遠くに行かなくても、ルーツは深くなる。'],
-  near: ['隣の県に越えただけで、故郷の味が恋しくなる。','すぐ帰れる距離。でも帰るたびに少し変わっている。','近いからこそ、違いがわかる。'],
-  medium: ['新幹線の距離。帰省のたびに車窓を眺める。','方言が抜けたはずなのに、地元の友人に会うと戻る。','離れてわかる、あの味の価値。'],
-  far: ['飛行機の距離。でも心の距離はゼロ。','遠くに来たからこそ、故郷の輪郭がはっきり見える。','土地を離れるほど、ルーツが深くなる。不思議なもの。'],
-  '27_13':'通勤電車でツッコミを飲み込む毎日。でも帰省の新幹線だけは予約が早い。',
-  '13_27':'大阪の人情が恋しくなると、梅田の地下街を思い出す。',
-  '1_47':'真冬でも半袖。暑さ耐性は北国育ちの方が強いらしい。',
-  '47_1':'雪を見ると、海が恋しくなる。不思議な体質。',
-  '13_13':'「東京って地元の味ないよね」と言われると密かに傷つく都民。',
-  '27_27':'大阪から出なかった。出る必要がなかった。それでいい。',
-  '1_1':'試される大地に残った。それが答え。',
-  '40_13':'博多弁が抜けない。抜く気もない。',
-  '26_13':'はんなり、と言われるたびに少し複雑な気持ち。'
+  same: [
+    '地元を離れなかった。離れる必要がなかった。最寄りのスーパーも、行きつけの店も、全部ここにある。ルーツ保持者としては最強の部類。',
+    'この土地に根を張り続ける覚悟。地元の友人が一人減り、二人減り。それでもここにいる。それもまた冒険と呼んでいい。',
+    '「どこ出身？」と聞かれて「ここ」と答える。その短さに、誇りが詰まっている。'
+  ],
+  near: [
+    '隣の県に越えただけなのに、方言が通じなくなった。コンビニのおにぎりの具も微妙に違う。文化の壁は県境にある。',
+    'すぐ帰れる距離。だからこそ油断する。気づけば半年帰ってない。近いことが、帰らない理由になっている。',
+    '越えた県境は一つだけ。でもその一つが、意外と大きかった。実家の味噌汁の味が、少し違って感じるようになった。'
+  ],
+  medium: [
+    '新幹線の車窓をぼんやり眺める帰省の時間が、実は一番好きだったりする。地元が近づくにつれて変わる景色。あの瞬間だけ、心が緩む。',
+    '方言が抜けたと思っていた。地元の友人に会った瞬間、全部戻った。脳のどこかに、ちゃんと保存されている。',
+    '離れてから気づくことがある。あの店のあの味は、他のどこにもなかった。当たり前だと思っていたものが、実は特別だった。'
+  ],
+  far: [
+    '飛行機に乗らないと帰れない距離。でも不思議なことに、心の距離はゼロのまま。離れるほどに、故郷の輪郭がくっきり見える。',
+    '遠くに来た。方言も抜けた。食の好みも変わった。でも、地元の話になると急に饒舌になる自分がいる。ルーツは消えない。',
+    '友人に「遠いところから来たね」と言われるたび、少し誇らしい。遠くに来たぶんだけ、ルーツが深くなる。不思議なもの。'
+  ],
+  '27_13':'通勤電車でツッコミを飲み込む毎日。エスカレーターの立ち位置を間違えて舌打ちされた回数、もう数えていない。でも帰省の新幹線だけは、発売と同時に予約する。',
+  '13_27':'大阪の人情と、おばちゃんの「あめちゃん食べる？」が恋しくなる。東京では誰もくれない。梅田の地下街の匂いを思い出すと、胸がきゅっとなる。',
+  '1_47':'真冬の沖縄で半袖。周りが震えている中、涼しい顔をしている。暑さ耐性は北国育ちの方が強いという仮説を、身をもって証明中。',
+  '47_1':'雪を見ると海が恋しくなる。冬の海で泳いでいた頃が懐かしい。北海道の冬は、沖縄の夏より長い。でもそれが新鮮で、嫌いじゃない。',
+  '13_13':'「東京って地元の味ないよね」と地方出身者に言われるたび、密かに傷つく。あるよ。もんじゃも、深川めしも、柳川鍋もある。言い返せないけど。',
+  '27_27':'大阪から出なかった。出る必要がなかった。ここには全部ある。たこ焼きも、お好み焼きも、人情も。世界の中心は梅田と難波の間にある。',
+  '1_1':'試される大地に残った。冬はマイナス20度、道路は凍る。それでもここがいい。この土地に選ばれた気がしている。それが答え。',
+  '40_13':'博多弁が抜けない。抜く気もない。「ばり」と「ちかっぱ」は標準語だと思っている。豚骨の匂いがしないラーメン屋は、ラーメン屋じゃない。',
+  '26_13':'「はんなり」と言われるたびに少し複雑な気持ち。京都人は全員おっとりしてると思われている。実は関西のツッコミ力はかなり高い。'
 };
 
 // TopoJSONデータ（グローバルに保持）
@@ -339,7 +357,7 @@ function getFlavor(f,t){const k=`${f}_${t}`;if(FLAVOR_TEXTS[k])return FLAVOR_TEX
 function renderPrefSVG(container, prefCode, features) {
   container.innerHTML = '';
   const feature = features.find(f => {
-    const pid = f.id || f.properties.id;
+    const pid = f.properties?.id || f.id;
     return parseInt(pid) === prefCode;
   });
   if (!feature) { container.innerHTML = '<div style="font-size:2.5rem">🗾</div>'; return; }
@@ -371,15 +389,18 @@ if(saved) selFrom.value=saved;
 function check(){genBtn.disabled=!(inpName.value.trim()&&selFrom.value&&selTo.value);}
 inpName.addEventListener('input',check);selFrom.addEventListener('change',check);selTo.addEventListener('change',check);
 
-// TopoJSONを先読み
-d3.json('https://raw.githubusercontent.com/dataofjapan/land/master/japan.topojson').then(data => {
+// TopoJSONを先読み（Promise保持）
+const topoPromise = d3.json('https://raw.githubusercontent.com/dataofjapan/land/master/japan.topojson').then(data => {
   topoData = data;
-}).catch(err => console.warn('TopoJSON読み込みエラー:', err));
+  return data;
+}).catch(err => { console.warn('TopoJSON読み込みエラー:', err); return null; });
 
 // ========================================================
 // カード生成
 // ========================================================
-genBtn.addEventListener('click', () => {
+genBtn.addEventListener('click', async () => {
+  // TopoJSON読み込み完了を待つ
+  await topoPromise;
   const name=inpName.value.trim(),fc=parseInt(selFrom.value),tc=parseInt(selTo.value);
   const stats=calcStats(fc,tc),rarity=getRarity(fc,tc),flavor=getFlavor(fc,tc);
   const num=String(fc).padStart(2,'0')+String(tc).padStart(2,'0');
