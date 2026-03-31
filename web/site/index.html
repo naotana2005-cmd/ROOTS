@@ -35,6 +35,72 @@
     a { text-decoration: none; color: inherit; }
 
     /* ===================================================
+       0. ナビゲーションバー
+    =================================================== */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 800; padding: 0 24px;
+      background: rgba(9,9,9,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(80,160,240,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+      opacity: 0; transform: translateY(-100%);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    #site-nav.visible { opacity: 1; transform: translateY(0); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; cursor: pointer;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem; letter-spacing: 0.12em;
+      color: #666; transition: color 0.2s; text-transform: uppercase;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #e0e0e0; }
+    .nav-links a.nav-cta {
+      color: #F0A032; border: 1px solid #F0A032;
+      padding: 6px 14px; border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .nav-links a.nav-cta:hover { background: #F0A032; color: #090909; }
+    /* ハンバーガー */
+    .nav-hamburger {
+      display: none; background: none; border: none;
+      cursor: pointer; padding: 8px; z-index: 810;
+    }
+    .nav-hamburger span {
+      display: block; width: 20px; height: 1.5px;
+      background: #e0e0e0; margin: 4px 0;
+      transition: all 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+    .nav-mobile {
+      display: none; position: fixed; top: 52px; left: 0; right: 0;
+      background: rgba(9,9,9,0.95); backdrop-filter: blur(12px);
+      padding: 24px; flex-direction: column; gap: 20px;
+      border-bottom: 1px solid rgba(80,160,240,0.08);
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      color: #888; text-transform: uppercase;
+    }
+    .nav-mobile a:hover { color: #e0e0e0; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: block; }
+    }
+
+    /* ===================================================
        1. ロゴイントロ オーバーレイ
     =================================================== */
     #intro-overlay {
@@ -902,6 +968,27 @@
 </head>
 <body>
 
+  <!-- ===== 0. ナビゲーションバー ===== -->
+  <nav id="site-nav">
+    <div class="nav-logo" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">ROOTS</div>
+    <div class="nav-links">
+      <a href="#how-it-works">仕組み</a>
+      <a href="#map-section">参加マップ</a>
+      <a href="#vote-form-section">参加する</a>
+      <a href="card/" class="nav-cta">私のルーツ</a>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="#hero" onclick="closeNavMobile()">HOME</a>
+    <a href="#how-it-works" onclick="closeNavMobile()">仕組み</a>
+    <a href="#map-section" onclick="closeNavMobile()">参加マップ</a>
+    <a href="#vote-form-section" onclick="closeNavMobile()">参加する</a>
+    <a href="card/">私のルーツ</a>
+  </div>
+
   <!-- ===== 1. ロゴイントロ ===== -->
   <div id="intro-overlay">
     <canvas id="intro-canvas"></canvas>
@@ -1319,6 +1406,8 @@ function showHero() {
   hero.classList.add('visible');
   loadJapanMap();
   createHeroParticles();
+  // ナビバー表示
+  if (typeof showNav === 'function') showNav();
 }
 
 async function loadJapanMap() {
@@ -2032,6 +2121,36 @@ function applyStatus(config) {
 
 // ページ読み込み時に設定を取得して適用
 loadVoteConfig().then(applyStatus);
+
+// ========================================================
+// 10. ナビゲーションバー
+// ========================================================
+const siteNav = document.getElementById('site-nav');
+const navHamburger = document.getElementById('nav-hamburger');
+const navMobile = document.getElementById('nav-mobile');
+
+function closeNavMobile() {
+  navMobile.classList.remove('open');
+  navHamburger.classList.remove('open');
+}
+
+// イントロ完了後にナビバーを表示
+function showNav() { siteNav.classList.add('visible'); }
+
+// ハンバーガーメニュー
+navHamburger.addEventListener('click', () => {
+  navHamburger.classList.toggle('open');
+  navMobile.classList.toggle('open');
+});
+
+// スムーズスクロール（ナビリンク）
+document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
 
   </script>
 </body>

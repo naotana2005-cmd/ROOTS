@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="あなたのルーツカードを作ろう。出身地と今住んでいる県で、世界にひとつのカードが生まれます。">
+  <meta property="og:title" content="ROOTS — 私のルーツカード">
+  <meta property="og:description" content="出身地と今住んでいる県で、世界にひとつのカードが生まれます。">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>私のルーツ — ROOTS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Mincho:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #090909; color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 80px 20px 40px;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ナビバー（メインページと共通） */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 800; padding: 0 24px;
+      background: rgba(9,9,9,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(80,160,240,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.12em;
+      background: linear-gradient(135deg, #60B0FF, #FFC050);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-back {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem; color: #666; letter-spacing: 0.08em;
+    }
+    .nav-back:hover { color: #e0e0e0; }
+
+    /* ページヘッダー */
+    .page-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.4em;
+      color: #50A0F0; margin-bottom: 8px; text-align: center;
+    }
+    .page-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700; color: #e0e0e0;
+      margin-bottom: 8px; text-align: center;
+    }
+    .page-desc {
+      font-size: 0.8rem; color: #888; text-align: center;
+      margin-bottom: 32px; line-height: 1.8;
+    }
+
+    /* 入力フォーム */
+    .card-form {
+      width: 100%; max-width: 400px; margin-bottom: 32px;
+    }
+    .card-form .form-group { margin-bottom: 16px; }
+    .card-form label {
+      display: block; font-size: 0.75rem; color: #bbb;
+      margin-bottom: 6px; letter-spacing: 0.05em;
+    }
+    .card-form input, .card-form select {
+      width: 100%; padding: 12px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(80,160,240,0.2);
+      border-radius: 4px; color: #e0e0e0;
+      font-family: 'Shippori Mincho', serif; font-size: 0.9rem;
+    }
+    .card-form input:focus, .card-form select:focus {
+      outline: none; border-color: #50A0F0;
+    }
+    .card-form select { appearance: none; cursor: pointer; }
+    .card-form select option { background: #111; color: #e0e0e0; }
+    .generate-btn {
+      display: block; width: 100%; padding: 16px;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.15em;
+      color: #F0A032; background: transparent;
+      border: 1.5px solid #F0A032;
+      border-radius: 4px; cursor: pointer;
+      transition: all 0.3s ease; margin-top: 24px;
+    }
+    .generate-btn:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; }
+    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ===== カード本体 ===== */
+    .card-preview { display: none; margin-top: 32px; text-align: center; }
+    .card-preview.show { display: block; }
+
+    .roots-card {
+      width: 315px; height: 440px;
+      border-radius: 12px; padding: 16px 18px;
+      position: relative; overflow: hidden;
+      background: #0d0d0d;
+      margin: 0 auto;
+      display: flex; flex-direction: column;
+    }
+    /* レア度枠 */
+    .roots-card.rarity-N { border: 2px solid #50A0F0; }
+    .roots-card.rarity-R { border: 2px solid; border-image: linear-gradient(135deg, #50A0F0, #60B0FF) 1; }
+    .roots-card.rarity-SR { border: 2px solid; border-image: linear-gradient(135deg, #60B0FF, #FFC050, #FF8030) 1; }
+    .roots-card.rarity-SSR {
+      border: 2px solid; border-image: linear-gradient(135deg, #FFD700, #FFC050, #FFD700) 1;
+      box-shadow: 0 0 20px rgba(255,215,0,0.15);
+    }
+
+    /* 県シルエット背景 */
+    .card-bg-silhouette {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12rem; opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-rarity {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.1em;
+    }
+    .card-rarity.N { color: #50A0F0; }
+    .card-rarity.R { color: #60B0FF; }
+    .card-rarity.SR { color: #FFC050; }
+    .card-rarity.SSR { color: #FFD700; }
+    .card-brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.5rem; color: #555; letter-spacing: 0.15em;
+    }
+
+    .card-visual {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; min-height: 80px;
+    }
+
+    .card-separator {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(80,160,240,0.3), transparent);
+      margin: 8px 0;
+    }
+
+    .card-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.1rem; font-weight: 700; color: #e0e0e0;
+    }
+    .card-route {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: #888; margin-top: 2px;
+    }
+    .card-route .from { color: #60B0FF; }
+    .card-route .to { color: #FFC050; }
+
+    .card-stats { margin-top: 10px; }
+    .card-stat-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 4px;
+    }
+    .card-stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.45rem; color: #888;
+      width: 50px; text-align: right; letter-spacing: 0.05em;
+    }
+    .card-stat-bar {
+      flex: 1; height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 3px; overflow: hidden;
+    }
+    .card-stat-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+    .card-stat-fill.roots { background: linear-gradient(90deg, #50A0F0, #60B0FF); }
+    .card-stat-fill.nostalgia { background: linear-gradient(90deg, #FFC050, #FFD880); }
+    .card-stat-fill.adventure { background: linear-gradient(90deg, #FF8030, #FFA060); }
+    .card-stat-fill.love { background: linear-gradient(90deg, #60B0FF, #FFC050); }
+    .card-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem; color: #bbb; width: 20px;
+    }
+
+    .card-separator-thin {
+      width: 100%; height: 1px;
+      background: rgba(255,255,255,0.05); margin: 8px 0;
+    }
+
+    .card-flavor {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.6rem; color: #999;
+      font-style: italic; line-height: 1.7;
+      min-height: 36px;
+    }
+
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: auto; padding-top: 6px;
+    }
+    .card-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.4rem; color: #444;
+    }
+    .card-url {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.35rem; color: #444;
+    }
+
+    /* アクションボタン */
+    .card-actions {
+      display: flex; gap: 12px; justify-content: center;
+      flex-wrap: wrap; margin-top: 24px;
+    }
+    .action-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid #F0A032;
+      border-radius: 20px;
+      color: #F0A032;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.8rem; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover { background: #F0A032; color: #090909; }
+    .action-btn.download { border-color: #50A0F0; color: #50A0F0; }
+    .action-btn.download:hover { background: #50A0F0; color: #090909; }
+
+    /* フッター */
+    .card-page-footer {
+      margin-top: 48px; text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.5rem; color: #333;
+    }
+
+    @media (max-width: 400px) {
+      .roots-card { width: 280px; height: 392px; padding: 12px 14px; }
+      .card-visual { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ナビ -->
+  <nav id="site-nav">
+    <a href="../" class="nav-logo">ROOTS</a>
+    <a href="../" class="nav-back">← HOME</a>
+  </nav>
+
+  <!-- ヘッダー -->
+  <div class="page-label">MY ROOTS CARD</div>
+  <div class="page-title">あなたのルーツカードを作る</div>
+  <div class="page-desc">出身地と今住んでいる県で、世界にひとつのカードが生まれます。</div>
+
+  <!-- 入力フォーム -->
+  <div class="card-form" id="card-form">
+    <div class="form-group">
+      <label>表示名</label>
+      <input type="text" id="input-name" placeholder="ニックネーム" maxlength="12">
+    </div>
+    <div class="form-group">
+      <label>出身地</label>
+      <select id="input-from"><option value="">選択してください</option></select>
+    </div>
+    <div class="form-group">
+      <label>今住んでいる県</label>
+      <select id="input-to"><option value="">選択してください</option></select>
+    </div>
+    <button class="generate-btn" id="generate-btn" disabled>ルーツカードを生成する</button>
+  </div>
+
+  <!-- カードプレビュー -->
+  <div class="card-preview" id="card-preview">
+    <div class="roots-card" id="roots-card">
+      <div class="card-header">
+        <div class="card-rarity" id="card-rarity"></div>
+        <div class="card-brand">ROOTS</div>
+      </div>
+      <div class="card-visual" id="card-visual"></div>
+      <div class="card-separator"></div>
+      <div class="card-name" id="card-name"></div>
+      <div class="card-route" id="card-route"></div>
+      <div class="card-stats" id="card-stats"></div>
+      <div class="card-separator-thin"></div>
+      <div class="card-flavor" id="card-flavor"></div>
+      <div class="card-footer">
+        <div class="card-number" id="card-number"></div>
+        <div class="card-url">roots-brewing.com</div>
+      </div>
+    </div>
+
+    <div class="card-actions">
+      <button class="action-btn download" id="btn-download">画像を保存</button>
+      <button class="action-btn" id="btn-copy">リンクをコピー</button>
+      <a class="action-btn" id="btn-x" target="_blank" rel="noopener">Xでシェア</a>
+    </div>
+  </div>
+
+  <div class="card-page-footer">© 2026 ROOTS BREWING</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+// ========================================================
+// データ定義
+// ========================================================
+const PREF_NAMES = {
+  1:'北海道',2:'青森県',3:'岩手県',4:'宮城県',5:'秋田県',6:'山形県',7:'福島県',
+  8:'茨城県',9:'栃木県',10:'群馬県',11:'埼玉県',12:'千葉県',13:'東京都',14:'神奈川県',
+  15:'新潟県',16:'富山県',17:'石川県',18:'福井県',19:'山梨県',20:'長野県',
+  21:'岐阜県',22:'静岡県',23:'愛知県',24:'三重県',25:'滋賀県',26:'京都府',
+  27:'大阪府',28:'兵庫県',29:'奈良県',30:'和歌山県',31:'鳥取県',32:'島根県',
+  33:'岡山県',34:'広島県',35:'山口県',36:'徳島県',37:'香川県',38:'愛媛県',
+  39:'高知県',40:'福岡県',41:'佐賀県',42:'長崎県',43:'熊本県',44:'大分県',
+  45:'宮崎県',46:'鹿児島県',47:'沖縄県'
+};
+
+// 県庁所在地の緯度経度（距離計算用）
+const PREF_COORDS = {
+  1:[43.06,141.35],2:[40.82,140.74],3:[39.70,141.15],4:[38.27,140.87],5:[39.72,140.10],
+  6:[38.24,140.33],7:[37.75,140.47],8:[36.34,140.45],9:[36.57,139.88],10:[36.39,139.06],
+  11:[35.86,139.65],12:[35.61,140.12],13:[35.68,139.69],14:[35.45,139.64],15:[37.90,139.02],
+  16:[36.70,137.21],17:[36.59,136.63],18:[36.07,136.22],19:[35.66,138.57],20:[36.23,138.18],
+  21:[35.39,136.72],22:[34.98,138.38],23:[35.18,136.91],24:[34.73,136.51],25:[35.00,135.87],
+  26:[35.02,135.76],27:[34.69,135.52],28:[34.69,135.18],29:[34.69,135.83],30:[34.23,135.17],
+  31:[35.50,134.24],32:[35.47,133.05],33:[34.66,133.93],34:[34.40,132.46],35:[34.19,131.47],
+  36:[34.07,134.56],37:[34.34,134.04],38:[33.84,132.77],39:[33.56,133.53],40:[33.61,130.42],
+  41:[33.25,130.30],42:[32.74,129.87],43:[32.79,130.74],44:[33.24,131.61],45:[31.91,131.42],
+  46:[31.56,130.56],47:[26.34,127.68]
+};
+
+// 県の絵文字（シルエット代わり）
+const PREF_EMOJI = {
+  1:'🏔️',2:'🍎',3:'⛰️',4:'🌊',5:'🌾',6:'🍒',7:'🍑',
+  8:'🫒',9:'🍓',10:'♨️',11:'🏙️',12:'🥜',13:'🗼',14:'🌅',
+  15:'🌾',16:'🐟',17:'🏯',18:'🦀',19:'🍇',20:'🍏',
+  21:'🐟',22:'🍵',23:'🏰',24:'🦐',25:'🏞️',26:'⛩️',
+  27:'🏙️',28:'🐄',29:'🦌',30:'🍊',31:'🐪',32:'⛩️',
+  33:'🍑',34:'🦪',35:'🐡',36:'🍋',37:'🍜',38:'🍊',
+  39:'🐟',40:'🍜',41:'🦑',42:'⛪',43:'🐴',44:'♨️',
+  45:'🥭',46:'🍠',47:'🌺'
+};
+
+// フレーバーテキスト（地方ブロック間 + 同県）
+const FLAVOR_TEXTS = {
+  same: [
+    '地元を離れなかった、最強のルーツ保持者。',
+    'この土地に根を張り続ける覚悟。それもまた冒険。',
+    '遠くに行かなくても、ルーツは深くなる。'
+  ],
+  near: [
+    '隣の県に越えただけで、故郷の味が恋しくなる。',
+    'すぐ帰れる距離。でも、帰るたびに少し変わっている。',
+    '近いからこそ、違いがわかる。'
+  ],
+  medium: [
+    '新幹線の距離。帰省のたびに車窓を眺める時間が好き。',
+    '方言が抜けたと思っていたのに、地元の友人に会うと戻る。',
+    '離れてわかる、あの味の価値。'
+  ],
+  far: [
+    '飛行機の距離。でも心の距離はゼロ。',
+    '遠くに来たからこそ、故郷の輪郭がはっきり見える。',
+    '土地を離れるほど、ルーツが深くなる。不思議なもの。'
+  ],
+  // 特別パターン
+  '27_13': '通勤電車でツッコミを飲み込む毎日。でも、帰省の新幹線だけは予約が早い。',
+  '13_27': '大阪の人情が恋しくなると、梅田の地下街を思い出す。',
+  '1_47': '真冬でも半袖。暑さ耐性は北国育ちの方が強いらしい。',
+  '47_1': '雪を見ると、海が恋しくなる。不思議な体質。',
+  '13_13': '地方出身者に「東京って地元の味ないよね」と言われると、密かに傷つく都民。',
+  '27_27': '大阪から出なかった。出る必要がなかった。それでいい。',
+  '1_1': '試される大地に残った。それが答え。'
+};
+
+// ========================================================
+// ユーティリティ関数
+// ========================================================
+function distance(code1, code2) {
+  const [lat1, lon1] = PREF_COORDS[code1];
+  const [lat2, lon2] = PREF_COORDS[code2];
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function calcStats(fromCode, toCode) {
+  const dist = distance(fromCode, toCode);
+  const maxDist = 2500; // 北海道↔沖縄の概算距離
+
+  let rootsScore, adventureScore;
+  if (fromCode === toCode) {
+    rootsScore = 100;
+    adventureScore = Math.floor(Math.random() * 20) + 10;
+  } else {
+    rootsScore = Math.max(5, Math.floor(100 - (dist / maxDist) * 95));
+    adventureScore = Math.min(100, Math.floor((dist / maxDist) * 95) + 5);
+  }
+  const nostalgiaScore = Math.floor(Math.random() * 30) + 60;
+  const loveScore = Math.floor(Math.random() * 25) + 65;
+
+  return { roots: rootsScore, nostalgia: nostalgiaScore, adventure: adventureScore, love: loveScore, distance: Math.round(dist) };
+}
+
+function getRarity(fromCode, toCode) {
+  if (fromCode === toCode) return 'N';
+  const dist = distance(fromCode, toCode);
+  if (dist < 150) return 'R';
+  if (dist < 800) return 'SR';
+  return 'SSR';
+}
+
+function getFlavorText(fromCode, toCode) {
+  const key = `${fromCode}_${toCode}`;
+  if (FLAVOR_TEXTS[key]) return FLAVOR_TEXTS[key];
+  const dist = distance(fromCode, toCode);
+  let pool;
+  if (fromCode === toCode) pool = FLAVOR_TEXTS.same;
+  else if (dist < 150) pool = FLAVOR_TEXTS.near;
+  else if (dist < 800) pool = FLAVOR_TEXTS.medium;
+  else pool = FLAVOR_TEXTS.far;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// ========================================================
+// フォーム初期化
+// ========================================================
+const selectFrom = document.getElementById('input-from');
+const selectTo = document.getElementById('input-to');
+const inputName = document.getElementById('input-name');
+const generateBtn = document.getElementById('generate-btn');
+
+Object.entries(PREF_NAMES).forEach(([code, name]) => {
+  const opt1 = new Option(name, code);
+  const opt2 = new Option(name, code);
+  selectFrom.appendChild(opt1);
+  selectTo.appendChild(opt2);
+});
+
+// localStorageから復元
+const savedPref = localStorage.getItem('roots_registered_pref');
+if (savedPref) selectFrom.value = savedPref;
+
+function checkForm() {
+  generateBtn.disabled = !(inputName.value.trim() && selectFrom.value && selectTo.value);
+}
+inputName.addEventListener('input', checkForm);
+selectFrom.addEventListener('change', checkForm);
+selectTo.addEventListener('change', checkForm);
+
+// ========================================================
+// カード生成
+// ========================================================
+generateBtn.addEventListener('click', () => {
+  const name = inputName.value.trim();
+  const fromCode = parseInt(selectFrom.value);
+  const toCode = parseInt(selectTo.value);
+
+  const stats = calcStats(fromCode, toCode);
+  const rarity = getRarity(fromCode, toCode);
+  const flavor = getFlavorText(fromCode, toCode);
+  const cardNum = String(fromCode).padStart(2, '0') + String(toCode).padStart(2, '0');
+
+  // カード描画
+  const card = document.getElementById('roots-card');
+  card.className = `roots-card rarity-${rarity}`;
+
+  document.getElementById('card-rarity').textContent = rarity;
+  document.getElementById('card-rarity').className = `card-rarity ${rarity}`;
+  document.getElementById('card-visual').textContent = PREF_EMOJI[fromCode] || '🗾';
+  document.getElementById('card-name').textContent = name;
+  document.getElementById('card-route').innerHTML =
+    `<span class="from">${PREF_NAMES[fromCode]}</span> → <span class="to">${PREF_NAMES[toCode]}</span>　${stats.distance}km`;
+
+  // ステータスバー
+  const statsHtml = [
+    { label: 'ROOTS', value: stats.roots, cls: 'roots' },
+    { label: 'NOSTALG', value: stats.nostalgia, cls: 'nostalgia' },
+    { label: 'ADVENT', value: stats.adventure, cls: 'adventure' },
+    { label: 'LOVE', value: stats.love, cls: 'love' },
+  ].map(s => `
+    <div class="card-stat-row">
+      <div class="card-stat-label">${s.label}</div>
+      <div class="card-stat-bar"><div class="card-stat-fill ${s.cls}" style="width:${s.value}%"></div></div>
+      <div class="card-stat-num">${s.value}</div>
+    </div>
+  `).join('');
+  document.getElementById('card-stats').innerHTML = statsHtml;
+
+  document.getElementById('card-flavor').textContent = `"${flavor}"`;
+  document.getElementById('card-number').textContent = `#${cardNum}`;
+
+  // プレビュー表示
+  document.getElementById('card-preview').classList.add('show');
+  document.getElementById('card-form').style.display = 'none';
+
+  // シェアボタン設定
+  const shareText = `${PREF_NAMES[fromCode]}出身、${PREF_NAMES[toCode]}在住。レア度${rarity}のルーツカードができました。 #ルーツカード #ROOTS_BREWING`;
+  document.getElementById('btn-x').href =
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(location.origin)}`;
+  document.getElementById('btn-copy').onclick = () => {
+    navigator.clipboard.writeText(location.origin + '/card/');
+    document.getElementById('btn-copy').textContent = 'コピーしました！';
+    setTimeout(() => { document.getElementById('btn-copy').textContent = 'リンクをコピー'; }, 2000);
+  };
+});
+
+// ========================================================
+// 画像保存
+// ========================================================
+document.getElementById('btn-download').addEventListener('click', async () => {
+  const card = document.getElementById('roots-card');
+  const canvas = await html2canvas(card, {
+    backgroundColor: '#0d0d0d',
+    scale: 2,
+    useCORS: true,
+  });
+  const link = document.createElement('a');
+  link.download = 'roots-card.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+  </script>
+</body>
+</html>
