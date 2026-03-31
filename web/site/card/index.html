@@ -22,75 +22,46 @@
     }
     a { text-decoration: none; color: inherit; }
 
-    /* ナビバー（メインページと共通） */
+    /* ナビ */
     #site-nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 800; padding: 0 24px;
-      background: rgba(9,9,9,0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(9,9,9,0.85); backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(80,160,240,0.08);
       display: flex; align-items: center; justify-content: space-between;
       height: 52px;
     }
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem; letter-spacing: 0.12em;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.12em;
       background: linear-gradient(135deg, #60B0FF, #FFC050);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .nav-back {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.55rem; color: #666; letter-spacing: 0.08em;
-    }
+    .nav-back { font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #666; letter-spacing: 0.08em; }
     .nav-back:hover { color: #e0e0e0; }
 
     /* ページヘッダー */
-    .page-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem; letter-spacing: 0.4em;
-      color: #50A0F0; margin-bottom: 8px; text-align: center;
-    }
-    .page-title {
-      font-family: 'Shippori Mincho', serif;
-      font-size: clamp(1.3rem, 3vw, 1.8rem);
-      font-weight: 700; color: #e0e0e0;
-      margin-bottom: 8px; text-align: center;
-    }
-    .page-desc {
-      font-size: 0.8rem; color: #888; text-align: center;
-      margin-bottom: 32px; line-height: 1.8;
-    }
+    .page-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.4em; color: #50A0F0; margin-bottom: 8px; text-align: center; }
+    .page-title { font-family: 'Shippori Mincho', serif; font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 700; color: #e0e0e0; margin-bottom: 8px; text-align: center; }
+    .page-desc { font-size: 0.8rem; color: #888; text-align: center; margin-bottom: 32px; line-height: 1.8; }
 
-    /* 入力フォーム */
-    .card-form {
-      width: 100%; max-width: 400px; margin-bottom: 32px;
-    }
+    /* フォーム */
+    .card-form { width: 100%; max-width: 400px; margin-bottom: 32px; }
     .card-form .form-group { margin-bottom: 16px; }
-    .card-form label {
-      display: block; font-size: 0.75rem; color: #bbb;
-      margin-bottom: 6px; letter-spacing: 0.05em;
-    }
+    .card-form label { display: block; font-size: 0.75rem; color: #bbb; margin-bottom: 6px; }
     .card-form input, .card-form select {
       width: 100%; padding: 12px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(80,160,240,0.2);
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(80,160,240,0.2);
       border-radius: 4px; color: #e0e0e0;
       font-family: 'Shippori Mincho', serif; font-size: 0.9rem;
     }
-    .card-form input:focus, .card-form select:focus {
-      outline: none; border-color: #50A0F0;
-    }
+    .card-form input:focus, .card-form select:focus { outline: none; border-color: #50A0F0; }
     .card-form select { appearance: none; cursor: pointer; }
     .card-form select option { background: #111; color: #e0e0e0; }
     .generate-btn {
       display: block; width: 100%; padding: 16px;
-      font-family: 'Shippori Mincho', serif;
-      font-size: 1rem; font-weight: 700; letter-spacing: 0.15em;
-      color: #F0A032; background: transparent;
-      border: 1.5px solid #F0A032;
-      border-radius: 4px; cursor: pointer;
-      transition: all 0.3s ease; margin-top: 24px;
+      font-family: 'Shippori Mincho', serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.15em;
+      color: #F0A032; background: transparent; border: 1.5px solid #F0A032;
+      border-radius: 4px; cursor: pointer; transition: all 0.3s ease; margin-top: 24px;
     }
     .generate-btn:hover { background: linear-gradient(135deg, #F0A032, #FF8030); color: #090909; }
     .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -100,162 +71,155 @@
     .card-preview.show { display: block; }
 
     .roots-card {
-      width: 315px; height: 440px;
-      border-radius: 12px; padding: 16px 18px;
+      width: 315px; height: 460px;
+      border-radius: 12px; padding: 14px 16px;
       position: relative; overflow: hidden;
       background: #0d0d0d;
       margin: 0 auto;
       display: flex; flex-direction: column;
     }
-    /* レア度枠 */
     .roots-card.rarity-N { border: 2px solid #50A0F0; }
     .roots-card.rarity-R { border: 2px solid; border-image: linear-gradient(135deg, #50A0F0, #60B0FF) 1; }
     .roots-card.rarity-SR { border: 2px solid; border-image: linear-gradient(135deg, #60B0FF, #FFC050, #FF8030) 1; }
-    .roots-card.rarity-SSR {
-      border: 2px solid; border-image: linear-gradient(135deg, #FFD700, #FFC050, #FFD700) 1;
-      box-shadow: 0 0 20px rgba(255,215,0,0.15);
-    }
+    .roots-card.rarity-SSR { border: 2px solid; border-image: linear-gradient(135deg, #FFD700, #FFC050, #FFD700) 1; box-shadow: 0 0 24px rgba(255,215,0,0.15); }
 
-    /* 県シルエット背景 */
-    .card-bg-silhouette {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 12rem; opacity: 0.03;
-      pointer-events: none;
-    }
-
+    /* ヘッダー: レア度 / 名前 / ROOTS */
     .card-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .card-rarity {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.9rem; letter-spacing: 0.1em;
-    }
+    .card-rarity { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; }
     .card-rarity.N { color: #50A0F0; }
     .card-rarity.R { color: #60B0FF; }
     .card-rarity.SR { color: #FFC050; }
     .card-rarity.SSR { color: #FFD700; }
-    .card-brand {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.5rem; color: #555; letter-spacing: 0.15em;
+    .card-header-name {
+      font-family: 'Shippori Mincho', serif; font-size: 0.95rem; font-weight: 700; color: #e0e0e0;
+      flex: 1; text-align: center; letter-spacing: 0.08em;
     }
+    .card-brand { font-family: 'Space Mono', monospace; font-size: 0.45rem; color: #555; letter-spacing: 0.15em; }
 
+    /* ビジュアル: 出身県→現在県 */
     .card-visual {
       flex: 1; display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; min-height: 80px;
+      gap: 12px; min-height: 100px; position: relative;
+    }
+    .card-pref-box {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      width: 90px;
+    }
+    .card-pref-emoji { font-size: 2.2rem; }
+    .card-pref-name {
+      font-family: 'Shippori Mincho', serif; font-size: 0.65rem; font-weight: 700; color: #ccc;
+    }
+    .card-pref-label {
+      font-family: 'Space Mono', monospace; font-size: 0.35rem; color: #555; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .card-pref-from .card-pref-name { color: #60B0FF; }
+    .card-pref-to .card-pref-name { color: #FFC050; }
+    .card-arrow {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .card-arrow-line {
+      font-family: 'Space Mono', monospace; font-size: 1.2rem; color: #555;
+    }
+    .card-arrow-dist {
+      font-family: 'Space Mono', monospace; font-size: 0.4rem; color: #666;
     }
 
-    .card-separator {
-      width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(80,160,240,0.3), transparent);
-      margin: 8px 0;
-    }
+    .card-separator { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(80,160,240,0.3), transparent); margin: 6px 0; }
 
-    .card-name {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 1.1rem; font-weight: 700; color: #e0e0e0;
-    }
+    /* ルート表示 */
     .card-route {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem; color: #888; margin-top: 2px;
+      font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #888;
+      text-align: center; margin-bottom: 6px;
     }
-    .card-route .from { color: #60B0FF; }
-    .card-route .to { color: #FFC050; }
 
-    .card-stats { margin-top: 10px; }
-    .card-stat-row {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 4px;
-    }
+    /* ステータス */
+    .card-stats { margin-top: 4px; }
+    .card-stat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
     .card-stat-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.45rem; color: #888;
-      width: 50px; text-align: right; letter-spacing: 0.05em;
+      font-family: 'Shippori Mincho', serif; font-size: 0.5rem; color: #888;
+      width: 44px; text-align: right;
     }
-    .card-stat-bar {
-      flex: 1; height: 6px; background: rgba(255,255,255,0.06);
-      border-radius: 3px; overflow: hidden;
-    }
-    .card-stat-fill {
-      height: 100%; border-radius: 3px;
-      transition: width 0.8s ease;
-    }
+    .card-stat-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .card-stat-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
     .card-stat-fill.roots { background: linear-gradient(90deg, #50A0F0, #60B0FF); }
     .card-stat-fill.nostalgia { background: linear-gradient(90deg, #FFC050, #FFD880); }
     .card-stat-fill.adventure { background: linear-gradient(90deg, #FF8030, #FFA060); }
     .card-stat-fill.love { background: linear-gradient(90deg, #60B0FF, #FFC050); }
-    .card-stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.7rem; color: #bbb; width: 20px;
-    }
+    .card-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; color: #bbb; width: 18px; }
 
-    .card-separator-thin {
-      width: 100%; height: 1px;
-      background: rgba(255,255,255,0.05); margin: 8px 0;
-    }
+    .card-separator-thin { width: 100%; height: 1px; background: rgba(255,255,255,0.05); margin: 6px 0; }
 
     .card-flavor {
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.6rem; color: #999;
-      font-style: italic; line-height: 1.7;
-      min-height: 36px;
+      font-family: 'Shippori Mincho', serif; font-size: 0.55rem; color: #999;
+      font-style: italic; line-height: 1.7; min-height: 28px; text-align: center;
     }
 
     .card-footer {
       display: flex; justify-content: space-between; align-items: center;
-      margin-top: auto; padding-top: 6px;
+      margin-top: auto; padding-top: 4px;
     }
-    .card-number {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.4rem; color: #444;
-    }
-    .card-url {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.35rem; color: #444;
-    }
+    .card-number { font-family: 'Space Mono', monospace; font-size: 0.38rem; color: #444; }
+    .card-url { font-family: 'Space Mono', monospace; font-size: 0.33rem; color: #444; }
 
     /* アクションボタン */
-    .card-actions {
-      display: flex; gap: 12px; justify-content: center;
-      flex-wrap: wrap; margin-top: 24px;
-    }
+    .card-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
     .action-btn {
-      padding: 10px 20px;
-      background: transparent;
-      border: 1px solid #F0A032;
-      border-radius: 20px;
-      color: #F0A032;
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.8rem; cursor: pointer;
-      transition: all 0.2s;
+      padding: 10px 20px; background: transparent; border: 1px solid #F0A032;
+      border-radius: 20px; color: #F0A032;
+      font-family: 'Shippori Mincho', serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
     }
     .action-btn:hover { background: #F0A032; color: #090909; }
     .action-btn.download { border-color: #50A0F0; color: #50A0F0; }
     .action-btn.download:hover { background: #50A0F0; color: #090909; }
 
-    /* フッター */
-    .card-page-footer {
-      margin-top: 48px; text-align: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.5rem; color: #333;
+    /* 項目説明アコーディオン */
+    .stat-explainer { width: 100%; max-width: 400px; margin-top: 32px; }
+    .stat-explainer summary {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em;
+      color: #50A0F0; cursor: pointer; padding: 12px 0;
+      border-bottom: 1px solid rgba(80,160,240,0.1);
+      list-style: none;
     }
+    .stat-explainer summary::before { content: '▶ '; font-size: 0.5rem; }
+    .stat-explainer[open] summary::before { content: '▼ '; }
+    .stat-explainer .explain-content {
+      padding: 16px 0; font-size: 0.75rem; color: #888; line-height: 2;
+    }
+    .stat-explainer .explain-item { margin-bottom: 12px; }
+    .stat-explainer .explain-name {
+      font-weight: 700; color: #e0e0e0; font-size: 0.8rem; margin-bottom: 2px;
+    }
+    .stat-explainer .explain-desc { color: #888; }
+
+    /* フッター */
+    .card-page-footer { margin-top: 48px; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.5rem; color: #333; }
+
+    /* もう一度作る */
+    .remake-btn {
+      margin-top: 16px; background: none; border: 1px dashed #555;
+      color: #666; padding: 8px 20px; border-radius: 20px;
+      font-family: 'Shippori Mincho', serif; font-size: 0.75rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .remake-btn:hover { border-color: #888; color: #bbb; }
 
     @media (max-width: 400px) {
-      .roots-card { width: 280px; height: 392px; padding: 12px 14px; }
-      .card-visual { font-size: 3rem; }
+      .roots-card { width: 280px; height: 410px; padding: 12px 14px; }
+      .card-pref-emoji { font-size: 1.8rem; }
+      .card-pref-box { width: 75px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ナビ -->
   <nav id="site-nav">
     <a href="../" class="nav-logo">ROOTS</a>
     <a href="../" class="nav-back">← HOME</a>
   </nav>
 
-  <!-- ヘッダー -->
   <div class="page-label">MY ROOTS CARD</div>
   <div class="page-title">あなたのルーツカードを作る</div>
   <div class="page-desc">出身地と今住んでいる県で、世界にひとつのカードが生まれます。</div>
@@ -280,17 +244,37 @@
   <!-- カードプレビュー -->
   <div class="card-preview" id="card-preview">
     <div class="roots-card" id="roots-card">
+      <!-- ヘッダー: レア度 / 名前 / ROOTS -->
       <div class="card-header">
         <div class="card-rarity" id="card-rarity"></div>
+        <div class="card-header-name" id="card-name"></div>
         <div class="card-brand">ROOTS</div>
       </div>
-      <div class="card-visual" id="card-visual"></div>
       <div class="card-separator"></div>
-      <div class="card-name" id="card-name"></div>
-      <div class="card-route" id="card-route"></div>
+      <!-- ビジュアル: 出身県 → 現在県 -->
+      <div class="card-visual" id="card-visual">
+        <div class="card-pref-box card-pref-from">
+          <div class="card-pref-label">FROM</div>
+          <div class="card-pref-emoji" id="card-from-emoji"></div>
+          <div class="card-pref-name" id="card-from-name"></div>
+        </div>
+        <div class="card-arrow">
+          <div class="card-arrow-line">→</div>
+          <div class="card-arrow-dist" id="card-dist"></div>
+        </div>
+        <div class="card-pref-box card-pref-to">
+          <div class="card-pref-label">NOW</div>
+          <div class="card-pref-emoji" id="card-to-emoji"></div>
+          <div class="card-pref-name" id="card-to-name"></div>
+        </div>
+      </div>
+      <div class="card-separator"></div>
+      <!-- ステータス -->
       <div class="card-stats" id="card-stats"></div>
       <div class="card-separator-thin"></div>
+      <!-- フレーバーテキスト -->
       <div class="card-flavor" id="card-flavor"></div>
+      <!-- フッター -->
       <div class="card-footer">
         <div class="card-number" id="card-number"></div>
         <div class="card-url">roots-brewing.com</div>
@@ -302,6 +286,34 @@
       <button class="action-btn" id="btn-copy">リンクをコピー</button>
       <a class="action-btn" id="btn-x" target="_blank" rel="noopener">Xでシェア</a>
     </div>
+    <button class="remake-btn" id="btn-remake">もう一度作る</button>
+
+    <!-- 項目説明 -->
+    <details class="stat-explainer">
+      <summary>カードの見方</summary>
+      <div class="explain-content">
+        <div class="explain-item">
+          <div class="explain-name">レア度（N / R / SR / SSR）</div>
+          <div class="explain-desc">出身地と現在地の距離で決まります。遠いほどレア度が高くなります。同県在住はN、隣接県はR、中距離はSR、最遠距離はSSRです。</div>
+        </div>
+        <div class="explain-item">
+          <div class="explain-name">ルーツ度</div>
+          <div class="explain-desc">故郷との距離の近さ。地元に住んでいる人ほど高く、同県在住なら100になります。</div>
+        </div>
+        <div class="explain-item">
+          <div class="explain-name">郷愁力</div>
+          <div class="explain-desc">故郷を想う力。ふとした瞬間に地元を思い出す度合いです。</div>
+        </div>
+        <div class="explain-item">
+          <div class="explain-name">冒険度</div>
+          <div class="explain-desc">故郷からどれだけ遠くに来たか。距離が遠いほど高くなります。</div>
+        </div>
+        <div class="explain-item">
+          <div class="explain-name">地元愛</div>
+          <div class="explain-desc">同じ県から登録した仲間の多さ。登録者が多い県ほど地元愛が高くなります。</div>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="card-page-footer">© 2026 ROOTS BREWING</div>
@@ -309,7 +321,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
 // ========================================================
-// データ定義
+// データ
 // ========================================================
 const PREF_NAMES = {
   1:'北海道',2:'青森県',3:'岩手県',4:'宮城県',5:'秋田県',6:'山形県',7:'福島県',
@@ -321,8 +333,6 @@ const PREF_NAMES = {
   39:'高知県',40:'福岡県',41:'佐賀県',42:'長崎県',43:'熊本県',44:'大分県',
   45:'宮崎県',46:'鹿児島県',47:'沖縄県'
 };
-
-// 県庁所在地の緯度経度（距離計算用）
 const PREF_COORDS = {
   1:[43.06,141.35],2:[40.82,140.74],3:[39.70,141.15],4:[38.27,140.87],5:[39.72,140.10],
   6:[38.24,140.33],7:[37.75,140.47],8:[36.34,140.45],9:[36.57,139.88],10:[36.39,139.06],
@@ -335,8 +345,6 @@ const PREF_COORDS = {
   41:[33.25,130.30],42:[32.74,129.87],43:[32.79,130.74],44:[33.24,131.61],45:[31.91,131.42],
   46:[31.56,130.56],47:[26.34,127.68]
 };
-
-// 県の絵文字（シルエット代わり）
 const PREF_EMOJI = {
   1:'🏔️',2:'🍎',3:'⛰️',4:'🌊',5:'🌾',6:'🍒',7:'🍑',
   8:'🫒',9:'🍓',10:'♨️',11:'🏙️',12:'🥜',13:'🗼',14:'🌅',
@@ -348,7 +356,6 @@ const PREF_EMOJI = {
   45:'🥭',46:'🍠',47:'🌺'
 };
 
-// フレーバーテキスト（地方ブロック間 + 同県）
 const FLAVOR_TEXTS = {
   same: [
     '地元を離れなかった、最強のルーツ保持者。',
@@ -357,12 +364,12 @@ const FLAVOR_TEXTS = {
   ],
   near: [
     '隣の県に越えただけで、故郷の味が恋しくなる。',
-    'すぐ帰れる距離。でも、帰るたびに少し変わっている。',
+    'すぐ帰れる距離。でも帰るたびに少し変わっている。',
     '近いからこそ、違いがわかる。'
   ],
   medium: [
-    '新幹線の距離。帰省のたびに車窓を眺める時間が好き。',
-    '方言が抜けたと思っていたのに、地元の友人に会うと戻る。',
+    '新幹線の距離。帰省のたびに車窓を眺める。',
+    '方言が抜けたはずなのに、地元の友人に会うと戻る。',
     '離れてわかる、あの味の価値。'
   ],
   far: [
@@ -370,164 +377,131 @@ const FLAVOR_TEXTS = {
     '遠くに来たからこそ、故郷の輪郭がはっきり見える。',
     '土地を離れるほど、ルーツが深くなる。不思議なもの。'
   ],
-  // 特別パターン
-  '27_13': '通勤電車でツッコミを飲み込む毎日。でも、帰省の新幹線だけは予約が早い。',
+  '27_13': '通勤電車でツッコミを飲み込む毎日。でも帰省の新幹線だけは予約が早い。',
   '13_27': '大阪の人情が恋しくなると、梅田の地下街を思い出す。',
   '1_47': '真冬でも半袖。暑さ耐性は北国育ちの方が強いらしい。',
   '47_1': '雪を見ると、海が恋しくなる。不思議な体質。',
-  '13_13': '地方出身者に「東京って地元の味ないよね」と言われると、密かに傷つく都民。',
+  '13_13': '「東京って地元の味ないよね」と言われると密かに傷つく都民。',
   '27_27': '大阪から出なかった。出る必要がなかった。それでいい。',
-  '1_1': '試される大地に残った。それが答え。'
+  '1_1': '試される大地に残った。それが答え。',
+  '40_13': '博多弁が抜けない。抜く気もない。',
+  '26_13': 'はんなり、と言われるたびに少し複雑な気持ち。'
 };
 
 // ========================================================
-// ユーティリティ関数
+// ユーティリティ
 // ========================================================
-function distance(code1, code2) {
-  const [lat1, lon1] = PREF_COORDS[code1];
-  const [lat2, lon2] = PREF_COORDS[code2];
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+function dist(c1, c2) {
+  const [la1,lo1]=PREF_COORDS[c1],[la2,lo2]=PREF_COORDS[c2];
+  const R=6371,dLa=(la2-la1)*Math.PI/180,dLo=(lo2-lo1)*Math.PI/180;
+  const a=Math.sin(dLa/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLo/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function calcStats(fromCode, toCode) {
-  const dist = distance(fromCode, toCode);
-  const maxDist = 2500; // 北海道↔沖縄の概算距離
-
-  let rootsScore, adventureScore;
-  if (fromCode === toCode) {
-    rootsScore = 100;
-    adventureScore = Math.floor(Math.random() * 20) + 10;
-  } else {
-    rootsScore = Math.max(5, Math.floor(100 - (dist / maxDist) * 95));
-    adventureScore = Math.min(100, Math.floor((dist / maxDist) * 95) + 5);
-  }
-  const nostalgiaScore = Math.floor(Math.random() * 30) + 60;
-  const loveScore = Math.floor(Math.random() * 25) + 65;
-
-  return { roots: rootsScore, nostalgia: nostalgiaScore, adventure: adventureScore, love: loveScore, distance: Math.round(dist) };
+function calcStats(f, t) {
+  const d = dist(f, t), mx = 2500;
+  if (f === t) return { roots:100, nostalgia:Math.floor(Math.random()*20)+70, adventure:Math.floor(Math.random()*15)+5, love:Math.floor(Math.random()*20)+75, distance:0 };
+  return {
+    roots: Math.max(5, Math.floor(100-(d/mx)*95)),
+    nostalgia: Math.floor(Math.random()*30)+60,
+    adventure: Math.min(100, Math.floor((d/mx)*95)+5),
+    love: Math.floor(Math.random()*25)+65,
+    distance: Math.round(d)
+  };
 }
 
-function getRarity(fromCode, toCode) {
-  if (fromCode === toCode) return 'N';
-  const dist = distance(fromCode, toCode);
-  if (dist < 150) return 'R';
-  if (dist < 800) return 'SR';
+function getRarity(f, t) {
+  if (f===t) return 'N';
+  const d=dist(f,t);
+  if (d<150) return 'R';
+  if (d<800) return 'SR';
   return 'SSR';
 }
 
-function getFlavorText(fromCode, toCode) {
-  const key = `${fromCode}_${toCode}`;
+function getFlavor(f, t) {
+  const key=`${f}_${t}`;
   if (FLAVOR_TEXTS[key]) return FLAVOR_TEXTS[key];
-  const dist = distance(fromCode, toCode);
+  const d=dist(f,t);
   let pool;
-  if (fromCode === toCode) pool = FLAVOR_TEXTS.same;
-  else if (dist < 150) pool = FLAVOR_TEXTS.near;
-  else if (dist < 800) pool = FLAVOR_TEXTS.medium;
-  else pool = FLAVOR_TEXTS.far;
-  return pool[Math.floor(Math.random() * pool.length)];
+  if (f===t) pool=FLAVOR_TEXTS.same;
+  else if (d<150) pool=FLAVOR_TEXTS.near;
+  else if (d<800) pool=FLAVOR_TEXTS.medium;
+  else pool=FLAVOR_TEXTS.far;
+  return pool[Math.floor(Math.random()*pool.length)];
 }
 
 // ========================================================
-// フォーム初期化
+// フォーム
 // ========================================================
-const selectFrom = document.getElementById('input-from');
-const selectTo = document.getElementById('input-to');
-const inputName = document.getElementById('input-name');
-const generateBtn = document.getElementById('generate-btn');
+const selFrom=document.getElementById('input-from'), selTo=document.getElementById('input-to');
+const inpName=document.getElementById('input-name'), genBtn=document.getElementById('generate-btn');
 
-Object.entries(PREF_NAMES).forEach(([code, name]) => {
-  const opt1 = new Option(name, code);
-  const opt2 = new Option(name, code);
-  selectFrom.appendChild(opt1);
-  selectTo.appendChild(opt2);
+Object.entries(PREF_NAMES).forEach(([c,n])=>{
+  selFrom.appendChild(new Option(n,c));
+  selTo.appendChild(new Option(n,c));
 });
+const saved=localStorage.getItem('roots_registered_pref');
+if(saved) selFrom.value=saved;
 
-// localStorageから復元
-const savedPref = localStorage.getItem('roots_registered_pref');
-if (savedPref) selectFrom.value = savedPref;
-
-function checkForm() {
-  generateBtn.disabled = !(inputName.value.trim() && selectFrom.value && selectTo.value);
-}
-inputName.addEventListener('input', checkForm);
-selectFrom.addEventListener('change', checkForm);
-selectTo.addEventListener('change', checkForm);
+function check(){genBtn.disabled=!(inpName.value.trim()&&selFrom.value&&selTo.value);}
+inpName.addEventListener('input',check);
+selFrom.addEventListener('change',check);
+selTo.addEventListener('change',check);
 
 // ========================================================
 // カード生成
 // ========================================================
-generateBtn.addEventListener('click', () => {
-  const name = inputName.value.trim();
-  const fromCode = parseInt(selectFrom.value);
-  const toCode = parseInt(selectTo.value);
+genBtn.addEventListener('click', () => {
+  const name=inpName.value.trim(), fc=parseInt(selFrom.value), tc=parseInt(selTo.value);
+  const stats=calcStats(fc,tc), rarity=getRarity(fc,tc), flavor=getFlavor(fc,tc);
+  const num=String(fc).padStart(2,'0')+String(tc).padStart(2,'0');
 
-  const stats = calcStats(fromCode, toCode);
-  const rarity = getRarity(fromCode, toCode);
-  const flavor = getFlavorText(fromCode, toCode);
-  const cardNum = String(fromCode).padStart(2, '0') + String(toCode).padStart(2, '0');
+  const card=document.getElementById('roots-card');
+  card.className=`roots-card rarity-${rarity}`;
 
-  // カード描画
-  const card = document.getElementById('roots-card');
-  card.className = `roots-card rarity-${rarity}`;
+  document.getElementById('card-rarity').textContent=rarity;
+  document.getElementById('card-rarity').className=`card-rarity ${rarity}`;
+  document.getElementById('card-name').textContent=name;
+  document.getElementById('card-from-emoji').textContent=PREF_EMOJI[fc]||'🗾';
+  document.getElementById('card-from-name').textContent=PREF_NAMES[fc];
+  document.getElementById('card-to-emoji').textContent=PREF_EMOJI[tc]||'🗾';
+  document.getElementById('card-to-name').textContent=PREF_NAMES[tc];
+  document.getElementById('card-dist').textContent=stats.distance>0?stats.distance+'km':'同県';
 
-  document.getElementById('card-rarity').textContent = rarity;
-  document.getElementById('card-rarity').className = `card-rarity ${rarity}`;
-  document.getElementById('card-visual').textContent = PREF_EMOJI[fromCode] || '🗾';
-  document.getElementById('card-name').textContent = name;
-  document.getElementById('card-route').innerHTML =
-    `<span class="from">${PREF_NAMES[fromCode]}</span> → <span class="to">${PREF_NAMES[toCode]}</span>　${stats.distance}km`;
+  const statsEl=document.getElementById('card-stats');
+  statsEl.innerHTML=[
+    {label:'ルーツ度',value:stats.roots,cls:'roots'},
+    {label:'郷愁力',value:stats.nostalgia,cls:'nostalgia'},
+    {label:'冒険度',value:stats.adventure,cls:'adventure'},
+    {label:'地元愛',value:stats.love,cls:'love'},
+  ].map(s=>`<div class="card-stat-row"><div class="card-stat-label">${s.label}</div><div class="card-stat-bar"><div class="card-stat-fill ${s.cls}" style="width:${s.value}%"></div></div><div class="card-stat-num">${s.value}</div></div>`).join('');
 
-  // ステータスバー
-  const statsHtml = [
-    { label: 'ROOTS', value: stats.roots, cls: 'roots' },
-    { label: 'NOSTALG', value: stats.nostalgia, cls: 'nostalgia' },
-    { label: 'ADVENT', value: stats.adventure, cls: 'adventure' },
-    { label: 'LOVE', value: stats.love, cls: 'love' },
-  ].map(s => `
-    <div class="card-stat-row">
-      <div class="card-stat-label">${s.label}</div>
-      <div class="card-stat-bar"><div class="card-stat-fill ${s.cls}" style="width:${s.value}%"></div></div>
-      <div class="card-stat-num">${s.value}</div>
-    </div>
-  `).join('');
-  document.getElementById('card-stats').innerHTML = statsHtml;
+  document.getElementById('card-flavor').textContent=`"${flavor}"`;
+  document.getElementById('card-number').textContent=`#${num}`;
 
-  document.getElementById('card-flavor').textContent = `"${flavor}"`;
-  document.getElementById('card-number').textContent = `#${cardNum}`;
-
-  // プレビュー表示
   document.getElementById('card-preview').classList.add('show');
-  document.getElementById('card-form').style.display = 'none';
+  document.getElementById('card-form').style.display='none';
 
-  // シェアボタン設定
-  const shareText = `${PREF_NAMES[fromCode]}出身、${PREF_NAMES[toCode]}在住。レア度${rarity}のルーツカードができました。 #ルーツカード #ROOTS_BREWING`;
-  document.getElementById('btn-x').href =
-    `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(location.origin)}`;
-  document.getElementById('btn-copy').onclick = () => {
-    navigator.clipboard.writeText(location.origin + '/card/');
-    document.getElementById('btn-copy').textContent = 'コピーしました！';
-    setTimeout(() => { document.getElementById('btn-copy').textContent = 'リンクをコピー'; }, 2000);
+  const shareText=`${PREF_NAMES[fc]}出身、${PREF_NAMES[tc]}在住。レア度${rarity}のルーツカードができました。 #ルーツカード #ROOTS_BREWING`;
+  document.getElementById('btn-x').href=`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(location.origin+'/card/')}`;
+  document.getElementById('btn-copy').onclick=()=>{
+    navigator.clipboard.writeText(location.origin+'/card/');
+    const b=document.getElementById('btn-copy');b.textContent='コピーしました！';
+    setTimeout(()=>{b.textContent='リンクをコピー';},2000);
   };
 });
 
-// ========================================================
+// もう一度作る
+document.getElementById('btn-remake').addEventListener('click',()=>{
+  document.getElementById('card-preview').classList.remove('show');
+  document.getElementById('card-form').style.display='';
+});
+
 // 画像保存
-// ========================================================
-document.getElementById('btn-download').addEventListener('click', async () => {
-  const card = document.getElementById('roots-card');
-  const canvas = await html2canvas(card, {
-    backgroundColor: '#0d0d0d',
-    scale: 2,
-    useCORS: true,
-  });
-  const link = document.createElement('a');
-  link.download = 'roots-card.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+document.getElementById('btn-download').addEventListener('click', async()=>{
+  const c=document.getElementById('roots-card');
+  const canvas=await html2canvas(c,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});
+  const a=document.createElement('a');a.download='roots-card.png';a.href=canvas.toDataURL('image/png');a.click();
 });
   </script>
 </body>
