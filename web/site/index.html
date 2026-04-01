@@ -369,6 +369,64 @@
       #how-it-works { padding: 60px 20px; }
     }
 
+    /* Aboutセクション */
+    #about-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #about-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, transparent, #50A0F0);
+    }
+    .about-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.4em;
+      color: #50A0F0; margin-bottom: 24px;
+    }
+    .about-story {
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .about-story p {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: #e0e0e0;
+      line-height: 2.2;
+      margin-bottom: 1.8em;
+      letter-spacing: 0.02em;
+    }
+    .about-story .story-break {
+      margin-bottom: 2.5em;
+    }
+    .about-story .story-accent {
+      color: #F0A032;
+    }
+    .about-story .story-dim {
+      color: #888;
+    }
+    .about-last {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #60B0FF 0%, #FFC050 50%, #FF8030 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-top: 3em;
+    }
+    @media (max-width: 600px) {
+      #about-section { padding: 80px 20px; }
+      .about-story { max-width: 100%; }
+    }
+
     /* 日本地図セクション */
     #map-section {
       min-height: 100vh;
@@ -972,10 +1030,7 @@
   <nav id="site-nav">
     <div class="nav-logo" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">ROOTS</div>
     <div class="nav-links">
-      <a href="#how-it-works">仕組み</a>
-      <a href="#map-section">参加マップ</a>
-      <a href="#vote-form-section">参加する</a>
-      <a href="card/" class="nav-cta">私のルーツ</a>
+      <a href="card/" class="nav-cta">ルーツ鑑定</a>
     </div>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="メニュー">
       <span></span><span></span><span></span>
@@ -983,10 +1038,7 @@
   </nav>
   <div class="nav-mobile" id="nav-mobile">
     <a href="#hero" onclick="closeNavMobile()">HOME</a>
-    <a href="#how-it-works" onclick="closeNavMobile()">仕組み</a>
-    <a href="#map-section" onclick="closeNavMobile()">参加マップ</a>
-    <a href="#vote-form-section" onclick="closeNavMobile()">参加する</a>
-    <a href="card/">私のルーツ</a>
+    <a href="card/">ルーツ鑑定</a>
   </div>
 
   <!-- ===== 1. ロゴイントロ ===== -->
@@ -1055,7 +1107,7 @@
       <div class="how-step-arrow">→</div>
       <div class="how-step">
         <div class="how-step-num">02</div>
-        <div class="how-step-icon">🌾</div>
+        <div class="how-step-icon">🗳️</div>
         <div class="how-step-name">味を投票する</div>
         <div class="how-step-desc">その土地の食材を提案します。</div>
       </div>
@@ -1067,6 +1119,19 @@
         <div class="how-step-desc">1位の食材で醸造が始まります。</div>
       </div>
     </div>
+  </section>
+
+  <!-- ===== 2.4 Aboutセクション ===== -->
+  <section id="about-section">
+    <div class="about-label">OUR STORY</div>
+    <div class="about-story">
+      <p>大阪で生まれた。<br>ほんで、東京に来た。</p>
+      <p class="story-break"><span class="story-dim">東京は便利で、楽しい。別になんも不満はない。</span></p>
+      <p>でも新幹線が新大阪駅に着くとき、<br>あのメロディーが流れたとき、<br>体が<span class="story-accent">「帰ってきた」</span>って言った。</p>
+      <p class="story-break">その瞬間をビールで作りたいと思った。</p>
+      <p>離れた人が、ふと故郷を思い出す一口。<br>ずっとおる人が、自分の場所をちょっと誇れる一杯。</p>
+    </div>
+    <div class="about-last">ROOTS.</div>
   </section>
 
   <!-- ===== 2.5 日本地図セクション ===== -->

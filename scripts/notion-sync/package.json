@@ -1,0 +1,13 @@
+{
+  "name": "roots-notion-sync",
+  "version": "1.0.0",
+  "description": "ROOTSプロジェクトの変更をNotionに同期",
+  "main": "sync-to-notion.js",
+  "scripts": {
+    "sync": "node sync-to-notion.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.0",
+    "dotenv": "^16.4.0"
+  }
+}

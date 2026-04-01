@@ -1,0 +1,54 @@
+{
+  "rootPageId": "334cab9d59c080338e63f551fa8c7594",
+  "dailyReportDbId": "335cab9d-59c0-8158-b5ed-d6be3f6fd47f",
+  "folderPages": {
+    "biz": "335cab9d-59c0-819e-a038-cc7aeb4f37fe",
+    "brand": "335cab9d-59c0-8108-a137-cf51be644c84",
+    "docs": "335cab9d-59c0-81cf-8226-fcad510d8fb8",
+    "marketing": "335cab9d-59c0-81ba-a208-e9168395577b",
+    "web": "335cab9d-59c0-81d7-9f5f-f61d38d965c8",
+    "biz/ec": "335cab9d-59c0-8131-a194-c1506b87710e",
+    "biz/license": "335cab9d-59c0-8153-bc05-d1df79524193",
+    "biz/oem": "335cab9d-59c0-8146-9ed7-f40761f839a0",
+    "brand/assets": "335cab9d-59c0-8195-95d5-f6aa7179e28b",
+    "marketing/sns": "335cab9d-59c0-8148-b8e1-f0d9fcfd3929",
+    "web/site": "335cab9d-59c0-8192-acdb-d566b855418f",
+    "web/site/card": "335cab9d-59c0-81fe-b69f-ea1977f4db4f"
+  },
+  "filePages": {
+    "biz/ec/ec-sales-strategy.md": "335cab9d-59c0-8112-8d08-e222c62ecd59",
+    "biz/license/legal_memo.md": "335cab9d-59c0-81c3-b5f6-e97ffdf5a815",
+    "biz/oem/oem-candidates.md": "335cab9d-59c0-81dd-a400-f52db3606a4a",
+    "biz/oem/packaging-strategy.md": "335cab9d-59c0-81ff-90e8-dd6e5c0651dd",
+    "brand/assets/logo-generator.html": "335cab9d-59c0-8104-b492-dca28c9821c8",
+    "brand/logo-spec.md": "335cab9d-59c0-8170-a17f-fe986695f3c2",
+    "brand/tone_guide.md": "335cab9d-59c0-8144-9b7c-dc89c00cd313",
+    "docs/business-roadmap.md": "335cab9d-59c0-8165-bfcd-dec973a9fb37",
+    "docs/status_design.md": "335cab9d-59c0-815d-92f6-c6cdf4c47e31",
+    "docs/vote_design.md": "335cab9d-59c0-8189-a671-d6d563be927f",
+    "marketing/sns/agent-team-guide.md": "335cab9d-59c0-812e-a4d0-e22a77c735da",
+    "marketing/sns/instagram-strategy.md": "335cab9d-59c0-811f-b78b-fa024458e5b0",
+    "marketing/sns/instagram-templates.md": "335cab9d-59c0-8179-a8d2-d37143c466a1",
+    "marketing/sns/posting-calendar.md": "335cab9d-59c0-8177-bd9f-fd52838c7c87",
+    "web/site/card/index.html": "335cab9d-59c0-8162-8d5c-cd7a680362c2",
+    "web/site/color-compare.html": "335cab9d-59c0-81cb-88e1-d9ce53b94b6e",
+    "web/site/hero-compare.html": "335cab9d-59c0-8193-86d7-e27560bbcdd5",
+    "web/site/index.html": "335cab9d-59c0-81ea-9a94-eaec77066e4c",
+    "web/site/vote_config.json": "335cab9d-59c0-815a-af73-de89541ba792"
+  },
+  "exclude": [
+    "CLAUDE.md",
+    "README.md",
+    "**/AGENTS.md",
+    "scripts/**",
+    ".gitignore",
+    "**/package.json",
+    "**/package-lock.json",
+    "**/tsconfig.json"
+  ],
+  "includeExtensions": [
+    ".md",
+    ".html",
+    ".json"
+  ]
+}
