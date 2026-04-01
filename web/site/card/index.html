@@ -149,14 +149,14 @@
 
     /* ===== フレーバーゾーン（30%） ===== */
     .card-flavor-area {
-      padding: 8px 16px 10px; text-align: center; flex: 1;
+      padding: 10px 14px 8px; text-align: center; flex: 1;
       display: flex; align-items: center; justify-content: center;
       background: rgba(255,255,255,0.015);
       border-top: 1px solid rgba(80,160,240,0.08);
     }
     .card-flavor-text {
-      font-family: 'Shippori Mincho', serif; font-size: 0.65rem;
-      color: #888; font-style: italic; line-height: 1.9;
+      font-family: 'Shippori Mincho', serif; font-size: 0.72rem;
+      color: #999; font-style: italic; line-height: 1.85;
     }
 
     /* ===== フッター帯（7%） ===== */
@@ -310,37 +310,109 @@ const PREF_COORDS = {
   46:[31.56,130.56],47:[26.34,127.68]
 };
 
-const FLAVOR_TEXTS = {
-  same: [
-    '地元を離れなかった。離れる必要がなかった。最寄りのスーパーも、行きつけの店も、全部ここにある。ルーツ保持者としては最強の部類。',
-    'この土地に根を張り続ける覚悟。地元の友人が一人減り、二人減り。それでもここにいる。それもまた冒険と呼んでいい。',
-    '「どこ出身？」と聞かれて「ここ」と答える。その短さに、誇りが詰まっている。'
-  ],
-  near: [
-    '隣の県に越えただけなのに、方言が通じなくなった。コンビニのおにぎりの具も微妙に違う。文化の壁は県境にある。',
-    'すぐ帰れる距離。だからこそ油断する。気づけば半年帰ってない。近いことが、帰らない理由になっている。',
-    '越えた県境は一つだけ。でもその一つが、意外と大きかった。実家の味噌汁の味が、少し違って感じるようになった。'
-  ],
-  medium: [
-    '新幹線の車窓をぼんやり眺める帰省の時間が、実は一番好きだったりする。地元が近づくにつれて変わる景色。あの瞬間だけ、心が緩む。',
-    '方言が抜けたと思っていた。地元の友人に会った瞬間、全部戻った。脳のどこかに、ちゃんと保存されている。',
-    '離れてから気づくことがある。あの店のあの味は、他のどこにもなかった。当たり前だと思っていたものが、実は特別だった。'
-  ],
-  far: [
-    '飛行機に乗らないと帰れない距離。でも不思議なことに、心の距離はゼロのまま。離れるほどに、故郷の輪郭がくっきり見える。',
-    '遠くに来た。方言も抜けた。食の好みも変わった。でも、地元の話になると急に饒舌になる自分がいる。ルーツは消えない。',
-    '友人に「遠いところから来たね」と言われるたび、少し誇らしい。遠くに来たぶんだけ、ルーツが深くなる。不思議なもの。'
-  ],
-  '27_13':'通勤電車でツッコミを飲み込む毎日。エスカレーターの立ち位置を間違えて舌打ちされた回数、もう数えていない。でも帰省の新幹線だけは、発売と同時に予約する。',
-  '13_27':'大阪の人情と、おばちゃんの「あめちゃん食べる？」が恋しくなる。東京では誰もくれない。梅田の地下街の匂いを思い出すと、胸がきゅっとなる。',
-  '1_47':'真冬の沖縄で半袖。周りが震えている中、涼しい顔をしている。暑さ耐性は北国育ちの方が強いという仮説を、身をもって証明中。',
-  '47_1':'雪を見ると海が恋しくなる。冬の海で泳いでいた頃が懐かしい。北海道の冬は、沖縄の夏より長い。でもそれが新鮮で、嫌いじゃない。',
-  '13_13':'「東京って地元の味ないよね」と地方出身者に言われるたび、密かに傷つく。あるよ。もんじゃも、深川めしも、柳川鍋もある。言い返せないけど。',
-  '27_27':'大阪から出なかった。出る必要がなかった。ここには全部ある。たこ焼きも、お好み焼きも、人情も。世界の中心は梅田と難波の間にある。',
-  '1_1':'試される大地に残った。冬はマイナス20度、道路は凍る。それでもここがいい。この土地に選ばれた気がしている。それが答え。',
-  '40_13':'博多弁が抜けない。抜く気もない。「ばり」と「ちかっぱ」は標準語だと思っている。豚骨の匂いがしないラーメン屋は、ラーメン屋じゃない。',
-  '26_13':'「はんなり」と言われるたびに少し複雑な気持ち。京都人は全員おっとりしてると思われている。実は関西のツッコミ力はかなり高い。'
+// 県ごとの特徴データ（食、方言、名物、あるある）
+const PREF_TRAITS = {
+  1:{food:'ジンギスカン',icon:'雪',trait:'冬はマイナス20度でも平気',brag:'でっかいどう精神',miss:'広い空と白い大地',dialect:'なまら',surprise:'コンビニの駐車場が本州の3倍広い'},
+  2:{food:'りんご',icon:'ねぶた',trait:'津軽弁は外国語レベル',brag:'日本一のりんご生産量',miss:'岩木山の朝焼け',dialect:'んだ',surprise:'自販機にりんごジュースが4種類ある'},
+  3:{food:'わんこそば',icon:'盛岡',trait:'わんこそば100杯は通過儀礼',brag:'冷麺の本場',miss:'チャグチャグ馬コの鈴の音',dialect:'〜っす',surprise:'盛岡冷麺は実は韓国ルーツ'},
+  4:{food:'牛タン',icon:'七夕',trait:'伊達政宗の末裔を名乗りたがる',brag:'楽天イーグルスの街',miss:'松島の月',dialect:'〜だっちゃ',surprise:'牛タンは実は仙台発祥の戦後グルメ'},
+  5:{food:'きりたんぽ',icon:'なまはげ',trait:'なまはげに本気で怯えた幼少期',brag:'美人が多い県',miss:'角館の桜',dialect:'んだんだ',surprise:'秋田犬の忠誠心は県民性と同じ'},
+  6:{food:'さくらんぼ',icon:'蔵王',trait:'さくらんぼの種飛ばしが特技',brag:'将棋の駒の生産量日本一',miss:'月山の残雪',dialect:'〜のぅ',surprise:'生産量日本一なのに県民はそんなに食べない'},
+  7:{food:'桃',icon:'赤べこ',trait:'会津と浜通りで文化が全然違う',brag:'喜多方ラーメンの聖地',miss:'磐梯山の紅葉',dialect:'〜だべした',surprise:'赤べこは疫病除けのお守り'},
+  8:{food:'干し芋',icon:'偕楽園',trait:'納豆を毎朝食べるは都市伝説',brag:'メロンの生産量が実は凄い',miss:'霞ヶ浦の夕日',dialect:'〜だっぺ',surprise:'干し芋の生産量は全国の9割'},
+  9:{food:'餃子',icon:'日光',trait:'宇都宮vs浜松の餃子戦争に参戦中',brag:'いちご王国',miss:'中禅寺湖の静けさ',dialect:'だいじ？',surprise:'かんぴょうの生産量も日本一'},
+  10:{food:'焼きまんじゅう',icon:'草津',trait:'空っ風に鍛えられた根性',brag:'こんにゃく生産量日本一',miss:'赤城山の夕暮れ',dialect:'〜だんべ',surprise:'草津温泉の湯もみは見るだけでも熱い'},
+  11:{food:'草加せんべい',icon:'さいたま',trait:'東京のベッドタウンと言われると悔しい',brag:'深谷ネギの甘さは異常',miss:'秩父の祭りの太鼓',dialect:'そうなん',surprise:'快晴日数が実は日本一クラス'},
+  12:{food:'落花生',icon:'房総',trait:'ディズニーは千葉にある（大事なこと）',brag:'落花生は殻付きで食べる',miss:'九十九里浜の波音',dialect:'〜だべ',surprise:'醤油の生産量も日本一（野田市）'},
+  13:{food:'もんじゃ焼き',icon:'東京タワー',trait:'「地元の味ないよね」と言われると傷つく',brag:'すべてが集まる街',miss:'下町の路地裏',dialect:'〜じゃん',surprise:'実は島しょ部に椿油の名産地がある'},
+  14:{food:'シウマイ',icon:'横浜',trait:'「横浜出身」と言いたがる（川崎市民も）',brag:'中華街の本気',miss:'湘南の潮風',dialect:'〜じゃん',surprise:'崎陽軒のシウマイは新幹線の定番'},
+  15:{food:'へぎそば',icon:'佐渡',trait:'コシヒカリへの誇りが異常',brag:'米どころの底力',miss:'信濃川の流れ',dialect:'〜らて',surprise:'枝豆の消費量が日本一'},
+  16:{food:'ます寿司',icon:'立山',trait:'「きときと」は新鮮という意味',brag:'白えびの透明感',miss:'立山連峰の朝焼け',dialect:'きときと',surprise:'回転寿司のレベルが異常に高い'},
+  17:{food:'治部煮',icon:'兼六園',trait:'加賀百万石の誇りが深い',brag:'金箔ソフトの元祖',miss:'兼六園の雪吊り',dialect:'〜げん',surprise:'金箔の国内生産シェア99%'},
+  18:{food:'越前がに',icon:'恐竜',trait:'恐竜博物館に3回は行った',brag:'メガネフレーム国内シェア96%',miss:'東尋坊の荒波',dialect:'〜の',surprise:'全国のメガネの大半が鯖江産'},
+  19:{food:'ほうとう',icon:'富士山',trait:'富士山は山梨のもの（静岡と永遠の論争）',brag:'ぶどうの生産量日本一',miss:'甲府盆地の星空',dialect:'〜ずら',surprise:'ワイナリーの数が日本一'},
+  20:{food:'おやき',icon:'信州',trait:'山が見えないと不安になる',brag:'わさびの清流',miss:'安曇野の田園風景',dialect:'〜だに',surprise:'県歌「信濃の国」を全員歌える'},
+  21:{food:'鶏ちゃん',icon:'白川郷',trait:'飛騨と美濃で文化が全然違う',brag:'飛騨牛の霜降り',miss:'長良川の鵜飼い',dialect:'〜やお',surprise:'白川郷の合掌造りの屋根は60度'},
+  22:{food:'さわやか',icon:'富士',trait:'「さわやか」の待ち時間に耐えられる',brag:'お茶の生産量日本一',miss:'駿河湾の夕焼け',dialect:'〜だら',surprise:'ハンバーグチェーン「さわやか」は県外に出ない'},
+  23:{food:'味噌カツ',icon:'名古屋城',trait:'味噌をかけない食べ物がない',brag:'モーニング文化の豊かさ',miss:'熱田神宮の静寂',dialect:'〜だがや',surprise:'喫茶店のモーニングは朝食を超えた文化'},
+  24:{food:'伊勢うどん',icon:'伊勢神宮',trait:'おかげ横丁で必ず赤福を買う',brag:'伊勢海老の本場',miss:'英虞湾の真珠筏',dialect:'〜やに',surprise:'松阪牛は「まつさか」が正式な読み方'},
+  25:{food:'近江牛',icon:'琵琶湖',trait:'琵琶湖の水を止めるぞ（京都への牽制）',brag:'日本最大の湖を持つ県',miss:'比叡山からの琵琶湖',dialect:'〜やんす',surprise:'琵琶湖は滋賀県の面積の6分の1'},
+  26:{food:'湯豆腐',icon:'金閣寺',trait:'「いけず」は実は愛情表現',brag:'千年の都の底力',miss:'鴨川の夕暮れ',dialect:'〜どす',surprise:'京都人の「考えときますわ」は断りの意味'},
+  27:{food:'たこ焼き',icon:'通天閣',trait:'ツッコミは呼吸と同じ',brag:'お笑いの聖地',miss:'道頓堀のネオン',dialect:'なんでやねん',surprise:'エスカレーターは右に立つ（全国で唯一）'},
+  28:{food:'明石焼き',icon:'姫路城',trait:'神戸出身と言いたがる（姫路市民も）',brag:'神戸牛の世界的知名度',miss:'六甲山の夜景',dialect:'〜やん',surprise:'明石焼きは「玉子焼き」が正式名称'},
+  29:{food:'柿の葉寿司',icon:'鹿',trait:'鹿せんべい代を常備している',brag:'1300年の歴史',miss:'東大寺の大仏の背中',dialect:'〜やで',surprise:'鹿が信号を待って渡る風景は日常'},
+  30:{food:'梅干し',icon:'熊野古道',trait:'梅の酸っぱさに動じない',brag:'みかんと梅の二刀流',miss:'白浜の白い砂',dialect:'〜よ',surprise:'梅干しの生産量は全国の6割'},
+  31:{food:'カニ',icon:'砂丘',trait:'砂丘でらくだに乗ったことがある',brag:'人口最少県の底力',miss:'大山の稜線',dialect:'〜だけん',surprise:'スタバがない県から最後に脱出した'},
+  32:{food:'出雲そば',icon:'出雲大社',trait:'縁結びの力を本気で信じている',brag:'神話の国',miss:'宍道湖の夕日',dialect:'〜だけん',surprise:'出雲大社の参拝作法は「二拝四拍手一拝」'},
+  33:{food:'きびだんご',icon:'桃太郎',trait:'桃太郎の子孫を名乗りたい',brag:'マスカットの宝石感',miss:'後楽園の庭',dialect:'〜じゃ',surprise:'デニムの聖地・児島がある'},
+  34:{food:'お好み焼き',icon:'厳島',trait:'広島風と関西風の違いに命をかける',brag:'もみじまんじゅうの進化形',miss:'瀬戸内海の凪',dialect:'〜じゃけん',surprise:'広島はソースの消費量日本一'},
+  35:{food:'ふぐ',icon:'錦帯橋',trait:'ふぐの毒に怯えない度胸',brag:'下関のふぐは世界一',miss:'角島大橋の絶景',dialect:'〜ちゃ',surprise:'ふぐの取扱量日本一は下関'},
+  36:{food:'すだち',icon:'阿波踊り',trait:'すだちを何にでもかける',brag:'阿波踊りの熱狂',miss:'鳴門の渦潮',dialect:'〜じょ',surprise:'LED生産量世界一の日亜化学がある'},
+  37:{food:'うどん',icon:'こんぴら',trait:'うどんは飲み物（県民談）',brag:'うどん県を公式名称にしたい',miss:'瀬戸大橋の夕暮れ',dialect:'〜やけん',surprise:'1人あたりのうどん消費量がぶっちぎり'},
+  38:{food:'みかん',icon:'道後温泉',trait:'ポンジュースが蛇口から出る（一部本当）',brag:'いよかんの甘さ',miss:'しまなみ海道の風',dialect:'〜ぞな',surprise:'松山空港にポンジュースの蛇口が実在する'},
+  39:{food:'かつおのタタキ',icon:'四万十川',trait:'酒が強いのは県民性',brag:'かつおの藁焼きの香り',miss:'仁淀川のブルー',dialect:'〜ぜよ',surprise:'飲酒量は全国トップクラス'},
+  40:{food:'もつ鍋',icon:'太宰府',trait:'「ばり」は強調語の最上級',brag:'明太子は博多の魂',miss:'中洲の屋台の灯り',dialect:'ばり〜',surprise:'博多ラーメンの替え玉は博多発祥'},
+  41:{food:'シシリアンライス',icon:'バルーン',trait:'佐賀の存在感を上げたい一心',brag:'有田焼の繊細さ',miss:'虹の松原の潮風',dialect:'〜ばい',surprise:'バルーンフェスタは世界大会レベル'},
+  42:{food:'ちゃんぽん',icon:'グラバー園',trait:'坂道を登る脚力が鍛えられた',brag:'異国情緒の本場',miss:'稲佐山の夜景',dialect:'〜ばい',surprise:'日本初のボウリング場がある'},
+  43:{food:'馬刺し',icon:'熊本城',trait:'くまモンは県民のアイドル',brag:'阿蘇の大草原',miss:'水前寺の湧水',dialect:'〜ばい',surprise:'くまモンの経済効果は年間数千億円'},
+  44:{food:'とり天',icon:'別府温泉',trait:'温泉に入りすぎて湯あたりしない体質',brag:'おんせん県の名は伊達じゃない',miss:'由布岳の朝霧',dialect:'〜っち',surprise:'源泉数と湧出量が日本一'},
+  45:{food:'チキン南蛮',icon:'青島',trait:'マンゴーの値段に異常に詳しい',brag:'日向夏の爽やかさ',miss:'高千穂峡の神秘',dialect:'〜っちゃが',surprise:'完熟マンゴーは1個数千円が当たり前'},
+  46:{food:'黒豚しゃぶ',icon:'桜島',trait:'桜島の灰に慣れすぎている',brag:'焼酎文化の深さ',miss:'指宿の砂蒸し温泉',dialect:'〜ごわす',surprise:'焼酎の消費量が日本一'},
+  47:{food:'ゴーヤチャンプルー',icon:'首里城',trait:'「なんくるないさ」は人生哲学',brag:'海の青さは世界レベル',miss:'三線の音色',dialect:'めんそーれ',surprise:'沖縄の成人式は全国ニュースになる'}
 };
+
+// テンプレートベースの動的フレーバー生成（各距離帯7パターン）
+function getFlavor(f, t) {
+  const fn = PREF_NAMES[f], tn = PREF_NAMES[t];
+  const ft = PREF_TRAITS[f], tt = PREF_TRAITS[t];
+  if (!ft || !tt) return '故郷は遠くなるほど、近くなる。不思議なもの。';
+
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  if (f === t) {
+    return pick([
+      `${fn}から出なかった。${ft.brag}。ここには全部ある。${ft.food}を食べて、${ft.miss}を眺めて。離れる理由が見つからなかった。`,
+      `「どこ出身？」「ここ」。${ft.trait}。${ft.food}の味は他県民には再現できない。地元最強のルーツ保持者。`,
+      `${fn}に残った。${ft.miss}を毎日見られる贅沢を知っている。${ft.surprise}。この土地のことなら誰にも負けない。`,
+      `「${ft.dialect}」が日常語。${ft.food}が冷蔵庫に常備されている。${fn}を出る理由を探したけど、結局見つからなかった。それでいい。`,
+      `${ft.surprise}。そんな土地で生まれ育った。${ft.miss}が当たり前の日常。贅沢さに気づいたのは、友人が羨ましがったとき。`,
+    ]);
+  }
+
+  const d = calcDist(f, t);
+
+  if (d < 150) {
+    return pick([
+      `${fn}から${tn}へ。県境を越えただけなのに${ft.food}が手に入りにくくなった。代わりに${tt.food}を覚えた。近いからこそ、違いがわかる。`,
+      `隣の県に来ただけ。${ft.trait}。でも${tn}では${tt.trait}。たった一つの県境が、文化の壁になっている。`,
+      `${fn}育ちが${tn}に来て気づいたこと。${tt.surprise}。知らなかった。でも${ft.miss}が恋しくなる夜は変わらない。`,
+      `すぐ帰れる距離。だからこそ油断する。気づけば半年帰ってない。${ft.food}が食べたい。${fn}の「${ft.dialect}」が聞きたい。`,
+      `${fn}と${tn}、近いのに${ft.food}と${tt.food}で食文化が全然違う。どっちも好き。それがルーツが近い者の特権。`,
+    ]);
+  }
+
+  if (d < 800) {
+    return pick([
+      `${fn}から${tn}へ、${Math.round(d)}kmの移動。${ft.food}の味を思い出すと帰りたくなる。${tn}の${tt.food}も美味いけど、${ft.miss}に勝るものはない。`,
+      `${ft.trait}。${tn}に来て${Math.round(d)}km離れても、それは変わらない。${tt.brag}に感心しつつも、心は${fn}にある。`,
+      `${fn}育ち、${tn}暮らし。${ft.food}と${tt.food}、どっちが好きか聞かれたら黙る。ルーツは一つだけど、居場所は二つある。`,
+      `${fn}の「${ft.dialect}」が口から出そうになるのを飲み込む日々。${tn}で${tt.food}を食べながら、${ft.miss}を想う。${Math.round(d)}kmの郷愁。`,
+      `${ft.surprise}。そう言うと${tn}の人は驚く。${tt.surprise}。そう返されて驚く。お互いの県を知るほど、自分のルーツが深くなる。`,
+      `${fn}から${tn}。新幹線の車窓が変わる瞬間が好き。${ft.icon}から${tt.icon}へ。景色が変わるたびに、二つの故郷があることを実感する。`,
+      `${ft.brag}。${tn}の友人に語ると少し自慢に聞こえるらしい。でも${tt.brag}も認めている。${Math.round(d)}km離れた二つの誇り。`,
+    ]);
+  }
+
+  return pick([
+    `${fn}から${tn}へ、${Math.round(d)}kmの大移動。${ft.food}の味は記憶の中で少し美化されている気がする。でも帰ると、記憶通りの味がする。それが故郷。`,
+    `${ft.brag}。そう語ると${tn}の人は目を丸くする。${Math.round(d)}km離れても${fn}の血は抜けない。${tt.food}を食べながら${ft.miss}を想う夜がある。`,
+    `${fn}から${tn}まで飛行機の距離。${ft.trait}。でも${tn}で暮らして気づいた。${tt.brag}。二つの土地を持つ人間は、二倍の故郷がある。`,
+    `「${ft.dialect}」が通じない土地に来た。${tn}では${tt.trait}。${Math.round(d)}km離れて初めて知った、${fn}の${ft.food}がどれだけ特別だったか。`,
+    `${ft.surprise}。${fn}では当たり前だったことが、${tn}では珍しがられる。${tt.surprise}。逆もまた然り。遠くに来たぶんだけ、世界が広がった。`,
+    `${fn}の「${ft.dialect}」と${tn}の空気。${ft.miss}と${tt.icon}。${Math.round(d)}km離れた二つの景色が、どちらも自分のルーツになった。故郷は増えるもの。`,
+    `${ft.food}が恋しくなると${fn}を思い出す。${tt.food}が美味いと${tn}に感謝する。${Math.round(d)}kmの距離が教えてくれたこと。どちらも、自分の一部。`,
+  ]);
+}
 
 // TopoJSONデータ（グローバルに保持）
 let topoData = null;
@@ -360,7 +432,18 @@ function calcStats(f,t){
   return{roots:Math.max(5,Math.floor(100-(d/mx)*95)),nostalgia:Math.floor(Math.random()*30)+60,adventure:Math.min(100,Math.floor((d/mx)*95)+5),love:Math.floor(Math.random()*25)+65,distance:Math.round(d)};
 }
 function getRarity(f,t){if(f===t)return'N';const d=calcDist(f,t);if(d<150)return'R';if(d<800)return'SR';return'SSR';}
-function getFlavor(f,t){const k=`${f}_${t}`;if(FLAVOR_TEXTS[k])return FLAVOR_TEXTS[k];const d=calcDist(f,t);let p;if(f===t)p=FLAVOR_TEXTS.same;else if(d<150)p=FLAVOR_TEXTS.near;else if(d<800)p=FLAVOR_TEXTS.medium;else p=FLAVOR_TEXTS.far;return p[Math.floor(Math.random()*p.length)];}
+
+// 離島を含む都道府県のメイン領域バウンディングボックス（経度,緯度）
+// 離島を除外してメイン部分のみ表示するためのクリッピング
+const PREF_CLIP = {
+  13: { minLon: 138.9, maxLon: 139.95, minLat: 35.5, maxLat: 35.9 },   // 東京都（伊豆・小笠原除外）
+  46: { minLon: 129.3, maxLon: 131.3, minLat: 30.2, maxLat: 32.0 },     // 鹿児島県（奄美除外）
+  47: { minLon: 127.0, maxLon: 128.5, minLat: 26.0, maxLat: 27.0 },     // 沖縄県（本島周辺のみ）
+  1:  { minLon: 139.3, maxLon: 145.9, minLat: 41.3, maxLat: 45.6 },     // 北海道（択捉等除外）
+  28: { minLon: 134.2, maxLon: 135.5, minLat: 34.2, maxLat: 35.7 },     // 兵庫県（淡路は含む、離島除外）
+  34: { minLon: 132.0, maxLon: 133.5, minLat: 34.0, maxLat: 34.8 },     // 広島県（離島除外）
+  42: { minLon: 129.4, maxLon: 130.5, minLat: 32.5, maxLat: 33.5 },     // 長崎県（五島列島の端除外）
+};
 
 // 県のSVGシルエットを生成
 function renderPrefSVG(container, prefCode, features) {
@@ -371,17 +454,46 @@ function renderPrefSVG(container, prefCode, features) {
   });
   if (!feature) { container.innerHTML = '<div style="font-size:2.5rem">🗾</div>'; return; }
 
+  // クリッピングが必要な県はジオメトリをフィルタリング
+  let displayFeature = feature;
+  const clip = PREF_CLIP[prefCode];
+  if (clip && feature.geometry) {
+    const clipped = JSON.parse(JSON.stringify(feature));
+    const filterCoords = (coords) => {
+      return coords.filter(ring => {
+        // リングの重心がクリッピング範囲内かチェック
+        let sumLon = 0, sumLat = 0, n = 0;
+        ring.forEach(pt => { sumLon += pt[0]; sumLat += pt[1]; n++; });
+        const cLon = sumLon / n, cLat = sumLat / n;
+        return cLon >= clip.minLon && cLon <= clip.maxLon && cLat >= clip.minLat && cLat <= clip.maxLat;
+      });
+    };
+    if (clipped.geometry.type === 'Polygon') {
+      clipped.geometry.coordinates = filterCoords(clipped.geometry.coordinates);
+      if (clipped.geometry.coordinates.length > 0) displayFeature = clipped;
+    } else if (clipped.geometry.type === 'MultiPolygon') {
+      clipped.geometry.coordinates = clipped.geometry.coordinates.filter(poly => {
+        const ring = poly[0];
+        let sumLon = 0, sumLat = 0, n = 0;
+        ring.forEach(pt => { sumLon += pt[0]; sumLat += pt[1]; n++; });
+        const cLon = sumLon / n, cLat = sumLat / n;
+        return cLon >= clip.minLon && cLon <= clip.maxLon && cLat >= clip.minLat && cLat <= clip.maxLat;
+      });
+      if (clipped.geometry.coordinates.length > 0) displayFeature = clipped;
+    }
+  }
+
   const svg = d3.select(container).append('svg')
     .attr('viewBox', '0 0 100 100')
     .attr('preserveAspectRatio', 'xMidYMid meet');
 
   const projection = d3.geoMercator();
-  projection.fitSize([90, 90], feature);
+  projection.fitSize([90, 90], displayFeature);
   const [tx, ty] = projection.translate();
   projection.translate([tx + 5, ty + 5]);
 
   svg.append('path')
-    .datum(feature)
+    .datum(displayFeature)
     .attr('d', d3.geoPath().projection(projection))
     .attr('fill', 'currentColor')
     .attr('stroke', 'none');
