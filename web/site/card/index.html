@@ -54,113 +54,121 @@
     .card-preview { display: none; margin-top: 32px; text-align: center; }
     .card-preview.show { display: block; }
 
+    /* ===== カード本体 ===== */
     .roots-card {
       width: 320px; height: 520px;
-      border-radius: 14px; padding: 0;
+      border-radius: 12px; padding: 0;
       position: relative; overflow: hidden;
-      background: linear-gradient(180deg, #0f1218 0%, #0a0a0a 100%);
+      background: linear-gradient(180deg, #111520 0%, #0a0a0a 100%);
       margin: 0 auto;
       display: flex; flex-direction: column;
     }
     /* レア度枠 */
-    .roots-card.rarity-N { border: 2.5px solid #3a7bd5; }
-    .roots-card.rarity-R { border: 2.5px solid; border-image: linear-gradient(135deg, #3a7bd5, #60B0FF, #3a7bd5) 1; }
+    .roots-card.rarity-N { border: 2px solid #3a7bd5; }
+    .roots-card.rarity-R { border: 2px solid; border-image: linear-gradient(135deg, #3a7bd5, #60B0FF, #3a7bd5) 1; }
     .roots-card.rarity-SR { border: 2.5px solid; border-image: linear-gradient(135deg, #60B0FF, #FFC050, #FF8030, #60B0FF) 1; }
     .roots-card.rarity-SSR { border: 3px solid; border-image: linear-gradient(135deg, #FFD700, #FFF1A8, #FFD700, #FFC050, #FFD700) 1; box-shadow: 0 0 30px rgba(255,215,0,0.2), inset 0 0 30px rgba(255,215,0,0.03); }
 
-    /* カード上部バー */
+    /* ===== ヘッダー帯（8%） ===== */
     .card-top {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(80,160,240,0.12);
     }
     .card-rarity-badge {
       font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.08em;
       padding: 2px 10px; border-radius: 3px; font-size: 1.1rem;
+      flex-shrink: 0;
     }
     .card-rarity-badge.N { background: rgba(58,123,213,0.15); color: #60B0FF; }
     .card-rarity-badge.R { background: rgba(58,123,213,0.2); color: #80C8FF; }
     .card-rarity-badge.SR { background: linear-gradient(135deg, rgba(96,176,255,0.2), rgba(255,192,80,0.2)); color: #FFC050; }
     .card-rarity-badge.SSR { background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,192,80,0.2)); color: #FFD700; text-shadow: 0 0 8px rgba(255,215,0,0.3); }
     .card-top-name {
-      font-family: 'Shippori Mincho', serif; font-size: 1.15rem; font-weight: 800;
-      color: #e8e8e8; letter-spacing: 0.1em;
+      font-family: 'Shippori Mincho', serif; font-size: 1.1rem; font-weight: 800;
+      color: #e8e8e8; letter-spacing: 0.08em; flex: 1; text-align: center;
     }
     .card-top-brand {
-      font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem; color: #444;
-      letter-spacing: 0.2em;
+      font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; color: #444;
+      letter-spacing: 0.2em; flex-shrink: 0;
     }
 
-    /* ビジュアルエリア */
+    /* ===== ビジュアルゾーン（35%） ===== */
     .card-visual-area {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      position: relative; padding: 0 18px;
+      height: 175px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; padding: 8px 14px;
     }
-    .card-pref-block { display: flex; flex-direction: column; align-items: center; width: 100px; }
+    .card-pref-block { display: flex; flex-direction: column; align-items: center; width: 105px; }
     .card-pref-svg-wrap {
-      width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;
+      width: 75px; height: 75px; display: flex; align-items: center; justify-content: center;
       position: relative;
     }
     .card-pref-svg-wrap svg { width: 100%; height: 100%; }
-    .card-pref-svg-wrap.from svg path { fill: #50A0F0; filter: drop-shadow(0 0 6px rgba(80,160,240,0.4)); }
-    .card-pref-svg-wrap.to svg path { fill: #F0A032; filter: drop-shadow(0 0 6px rgba(240,160,50,0.4)); }
+    .card-pref-svg-wrap.from svg path { fill: #50A0F0; filter: drop-shadow(0 0 8px rgba(80,160,240,0.5)); }
+    .card-pref-svg-wrap.to svg path { fill: #F0A032; filter: drop-shadow(0 0 8px rgba(240,160,50,0.5)); }
     .card-pref-tag {
-      font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em;
-      color: #666; margin-bottom: 4px;
+      font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 0.15em;
+      color: #555; margin-bottom: 2px;
     }
     .card-pref-name-label {
-      font-family: 'Shippori Mincho', serif; font-size: 0.85rem; font-weight: 700;
-      margin-top: 4px;
+      font-family: 'Shippori Mincho', serif; font-size: 0.9rem; font-weight: 700;
+      margin-top: 3px;
     }
     .card-pref-block.from .card-pref-name-label { color: #60B0FF; }
     .card-pref-block.to .card-pref-name-label { color: #FFC050; }
 
     .card-arrow-block {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      margin: 0 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      margin: 0 4px; padding-top: 10px;
     }
     .card-arrow-icon {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       background: linear-gradient(90deg, #60B0FF, #FFC050);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .card-arrow-km {
-      font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #666;
+      font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #555;
     }
 
-    /* 区切り線 */
-    .card-divider { width: calc(100% - 36px); height: 1px; margin: 0 auto; background: linear-gradient(90deg, transparent, rgba(80,160,240,0.2), rgba(240,160,50,0.2), transparent); }
+    /* ===== 区切り線 ===== */
+    .card-divider { width: calc(100% - 28px); height: 1px; margin: 0 auto; background: linear-gradient(90deg, transparent, rgba(80,160,240,0.15), rgba(240,160,50,0.15), transparent); }
 
-    /* ステータス */
-    .card-stats-area { padding: 10px 18px 6px; }
-    .card-stat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-    .card-stat-label { font-family: 'Shippori Mincho', serif; font-size: 0.55rem; color: #777; width: 42px; text-align: right; }
-    .card-stat-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
-    .card-stat-fill { height: 100%; border-radius: 2px; }
+    /* ===== ステータスゾーン（20%） ===== */
+    .card-stats-area { padding: 10px 16px 8px; }
+    .card-stat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .card-stat-label { font-family: 'Shippori Mincho', serif; font-size: 0.6rem; color: #777; width: 44px; text-align: right; flex-shrink: 0; }
+    .card-stat-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+    .card-stat-fill { height: 100%; border-radius: 3px; }
     .card-stat-fill.roots { background: linear-gradient(90deg, #3a7bd5, #60B0FF); }
     .card-stat-fill.nostalgia { background: linear-gradient(90deg, #e6a020, #FFC050); }
     .card-stat-fill.adventure { background: linear-gradient(90deg, #e06020, #FF8030); }
     .card-stat-fill.love { background: linear-gradient(90deg, #50A0F0, #FFC050); }
-    .card-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; color: #aaa; width: 22px; text-align: right; }
+    .card-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; color: #bbb; width: 24px; text-align: right; }
 
-    /* フレーバー */
+    /* ===== フレーバーゾーン（30%） ===== */
     .card-flavor-area {
-      padding: 8px 18px 12px; text-align: center; flex: 1;
+      padding: 8px 16px 10px; text-align: center; flex: 1;
       display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.015);
+      border-top: 1px solid rgba(80,160,240,0.08);
     }
     .card-flavor-text {
-      font-family: 'Shippori Mincho', serif; font-size: 0.7rem;
-      color: #999; font-style: italic; line-height: 2;
+      font-family: 'Shippori Mincho', serif; font-size: 0.65rem;
+      color: #888; font-style: italic; line-height: 1.9;
     }
 
-    /* フッター */
+    /* ===== フッター帯（7%） ===== */
     .card-bottom {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 0 18px 12px; margin-top: auto;
+      padding: 6px 14px 10px;
+      border-top: 1px solid rgba(80,160,240,0.06);
     }
-    .card-num { font-family: 'Space Mono', monospace; font-size: 0.4rem; color: #333; }
-    .card-url-text { font-family: 'Space Mono', monospace; font-size: 0.35rem; color: #333; }
+    .card-num { font-family: 'Space Mono', monospace; font-size: 0.45rem; color: #444; }
+    .card-url-text { font-family: 'Space Mono', monospace; font-size: 0.4rem; color: #444; }
 
-    /* アクション */
+    /* ===== アクション ===== */
     .card-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
     .action-btn { padding: 10px 20px; background: transparent; border: 1px solid #F0A032; border-radius: 20px; color: #F0A032; font-family: 'Shippori Mincho', serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
     .action-btn:hover { background: #F0A032; color: #090909; }
@@ -169,7 +177,7 @@
     .remake-btn { margin-top: 16px; background: none; border: 1px dashed #555; color: #666; padding: 8px 20px; border-radius: 20px; font-family: 'Shippori Mincho', serif; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
     .remake-btn:hover { border-color: #888; color: #bbb; }
 
-    /* 説明 */
+    /* ===== 説明 ===== */
     .stat-explainer { width: 100%; max-width: 400px; margin-top: 32px; }
     .stat-explainer summary { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: #50A0F0; cursor: pointer; padding: 12px 0; border-bottom: 1px solid rgba(80,160,240,0.1); list-style: none; }
     .stat-explainer summary::before { content: '▶ '; font-size: 0.5rem; }
@@ -181,10 +189,12 @@
     .card-page-footer { margin-top: 48px; text-align: center; font-family: 'Space Mono', monospace; font-size: 0.5rem; color: #333; }
 
     @media (max-width: 380px) {
-      .roots-card { width: 290px; height: 475px; }
-      .card-pref-svg-wrap { width: 65px; height: 65px; }
-      .card-top-name { font-size: 1rem; }
-      .card-flavor-text { font-size: 0.6rem; }
+      .roots-card { width: 290px; height: 480px; }
+      .card-visual-area { height: 155px; }
+      .card-pref-svg-wrap { width: 60px; height: 60px; }
+      .card-top-name { font-size: 0.95rem; }
+      .card-flavor-text { font-size: 0.58rem; }
+      .card-pref-name-label { font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -222,7 +232,6 @@
         <div class="card-top-name" id="card-name"></div>
         <div class="card-top-brand">ROOTS</div>
       </div>
-      <div class="card-divider"></div>
       <div class="card-visual-area">
         <div class="card-pref-block from">
           <div class="card-pref-tag">出身</div>
