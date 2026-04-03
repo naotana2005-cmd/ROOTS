@@ -1354,26 +1354,37 @@ function animateIntro() {
 }
 animateIntro();
 
-introBrand.style.opacity = '1';
-'ROOTS'.split('').forEach((l, i) => {
-  const span = document.createElement('span');
-  span.textContent = l;
-  introBrand.appendChild(span);
-  setTimeout(() => span.classList.add('pop'), 600 + i * 150);
-});
-
-setTimeout(() => introTagline.classList.add('show'), 1500);
-
-setTimeout(() => {
-  introFlash.classList.add('fire');
-  introParticles.forEach(p => p.explode());
-}, 2200);
-
-setTimeout(() => {
+// イントロ制御: 初回のみ再生、2回目以降はスキップ
+if (sessionStorage.getItem('roots_intro_shown')) {
+  // 2回目以降: イントロをスキップして即ヒーロー表示
   cancelAnimationFrame(introAnimFrame);
-  introOverlay.classList.add('fade-out');
+  introOverlay.style.display = 'none';
   showHero();
-}, 3200);
+} else {
+  // 初回: イントロを再生
+  sessionStorage.setItem('roots_intro_shown', 'true');
+
+  introBrand.style.opacity = '1';
+  'ROOTS'.split('').forEach((l, i) => {
+    const span = document.createElement('span');
+    span.textContent = l;
+    introBrand.appendChild(span);
+    setTimeout(() => span.classList.add('pop'), 600 + i * 150);
+  });
+
+  setTimeout(() => introTagline.classList.add('show'), 1500);
+
+  setTimeout(() => {
+    introFlash.classList.add('fire');
+    introParticles.forEach(p => p.explode());
+  }, 2200);
+
+  setTimeout(() => {
+    cancelAnimationFrame(introAnimFrame);
+    introOverlay.classList.add('fade-out');
+    showHero();
+  }, 3200);
+}
 
 // ========================================================
 // 2. データ定義（都道府県・人口・地方・ダミー投票）
